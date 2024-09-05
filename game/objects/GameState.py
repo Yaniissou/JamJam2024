@@ -1,5 +1,5 @@
 from enum import Enum
 
 class GameState(Enum):
-    ENTRYPOINT = 1,
-    SELECTING_COUNTRY = 2
+    ENTRYPOINT = 0
+    SELECTING_COUNTRY = 1

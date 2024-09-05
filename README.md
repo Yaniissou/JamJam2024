@@ -6,6 +6,7 @@ Team members:
 - Idibeï Hamid
 - Yanis Harkati
 - Tom Jochum
+- Rachel Peretti
 
 We had a week and two days to learn Python in order to create a game using the pygame library.
 

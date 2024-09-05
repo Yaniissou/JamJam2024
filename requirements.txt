@@ -1,0 +1,2 @@
+#packages to install
+pygame==2.6.0

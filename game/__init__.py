@@ -17,14 +17,22 @@ titlefont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 72)
 textFont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 48)
 parentheseFont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 24)
 KAKI = (89, 102, 67)
-18
+startButton = Button(window_width / 2, window_height / 1.25, pygame.image.load("./assets/startbutton.jpg"))
+
 def initMenu():
     background = pygame.image.load("./assets/menu-background.png")
+
     titletext = titlefont.render("Concorde", False, (0, 0, 0))
     titletext_rect = titletext.get_rect()
-    titletext_rect.center = (window_width / 2, window_height / 4)
+    titletext_rect.center = (window_width/2, window_height/4)
+
+
+
     window.blit(background, (0, 0))
     window.blit(titletext, titletext_rect)
+    startButton.draw(window)
+
+
 
 def choosePseudo(name):
     titletext = titlefont.render("Choisir un pseudo", False, (0, 0, 0))
@@ -58,6 +66,10 @@ while running:
                     name += event.unicode
 
     gamestate = GameState.GameState.CHOOSE_PSEUDO
+    if startButton.isClicked():
+        gamestate = GameState.GameState.CHOOSE_PSEUDO
+
+    player.deplacer()
 
     if gamestate == GameState.GameState.CHOOSE_PSEUDO:
         choosePseudo(name)

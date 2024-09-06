@@ -4,9 +4,9 @@ import socket
 class Network:
     def __init__(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.serveur = "localhost"  # adresse IP
-        self.port = 5555
-        self.adresse = (self.serveur, self.port)
+        self.serveur = "192.168.41.219"  #  IP de serveur ETHERNET
+        self.port = 1929
+        self.adresse  = (self.serveur, self.port)
         self.position = self.connecter()
 
     # Fonction pour obtenir la position initiale

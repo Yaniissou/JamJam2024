@@ -61,7 +61,6 @@ while running:
                 elif len(name)<= 18:
                     name += event.unicode
 
-    gamestate = GameState.GameState.CHOOSE_PSEUDO
     if startButton.isClicked():
         gamestate = GameState.GameState.CHOOSE_PSEUDO
 

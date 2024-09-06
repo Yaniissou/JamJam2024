@@ -1,7 +1,7 @@
 import pygame
 from objects import GameState
 from objects.player import Player
-from button import Button
+from objects.button import Button
 
 
 pygame.init()

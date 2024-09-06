@@ -26,13 +26,9 @@ def initMenu():
     titletext_rect = titletext.get_rect()
     titletext_rect.center = (window_width/2, window_height/4)
 
-
-
     window.blit(background, (0, 0))
     window.blit(titletext, titletext_rect)
     startButton.draw(window)
-
-
 
 def choosePseudo(name):
     titletext = titlefont.render("Choisir un pseudo", False, (0, 0, 0))

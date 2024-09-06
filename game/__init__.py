@@ -16,8 +16,12 @@ player.image = pygame.transform.scale(player.image, (100, 100))
 titlefont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 72)
 textFont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 48)
 parentheseFont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 24)
-KAKI = (89, 102, 67)
-startButton = Button(window_width / 2, window_height / 1.25, pygame.image.load("./assets/startbutton.jpg"))
+GRIS = (229, 231, 230)
+ORANGE_PALE = (238, 230, 216)
+startButton = Button(window_width / 1.5, window_height / 1.25, pygame.image.load("./assets/btn_start.png"))
+nameButton =  Button(window_width / 1.5, window_height / 1.25, pygame.image.load("./assets/btn_valider.png"))
+startButton.image = pygame.transform.scale(startButton.image,(246,78))
+nameButton.image = pygame.transform.scale(nameButton.image,(246,78))
 
 def initMenu():
     background = pygame.image.load("./assets/menu-background.png")
@@ -40,12 +44,17 @@ def choosePseudo(name):
     parentheseText = parentheseFont.render("(18 char max)", False, (0, 0, 0))
     parentheseText_rect = parentheseText.get_rect()
     parentheseText_rect.center = (window_width / 2, 365)
-    window.fill(KAKI)
-    pygame.draw.rect(window, (255, 255, 255), (window_width / 4, window_height / 2, 512, 64))
+    window.fill(ORANGE_PALE)
+    pygame.draw.rect(window, (GRIS), (window_width / 4, window_height / 2, 512, 64))
     window.blit(titletext, titletext_rect)
     window.blit(pseudoUser, pseudoUser_rect)
     window.blit(parentheseText,parentheseText_rect)
+    nameButton.draw(window)
 
+def selectCOuntry():
+    titletext = titlefont.render("Choisir un pseudo", False, (0, 0, 0))
+    titletext_rect = titletext.get_rect()
+    titletext_rect.center = (window_width / 2, window_height / 4)
 while running:
     if gamestate == GameState.GameState.ENTRYPOINT:
         initMenu()
@@ -63,11 +72,18 @@ while running:
 
     if startButton.isClicked():
         gamestate = GameState.GameState.CHOOSE_PSEUDO
-
-    player.deplacer()
-
     if gamestate == GameState.GameState.CHOOSE_PSEUDO:
         choosePseudo(name)
+
+    if nameButton.isClicked():
+        gamestate = GameState.GameState.SELECTING_COUNTRY
+    player.deplacer()
+
+
+
+    if gamestate == GameState.GameState.SELECTING_COUNTRY:
+        selectCOuntry()
+
 
     pygame.display.update()
     clock.tick(60)

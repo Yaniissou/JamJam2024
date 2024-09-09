@@ -24,6 +24,13 @@ nameButton =  Button(window_width / 1.6, window_height / 1.25, pygame.image.load
 startButton.image = pygame.transform.scale(startButton.image,(246,78))
 nameButton.image = pygame.transform.scale(nameButton.image,(246,78))
 tmx_data = pytmx.util_pygame.load_pygame("assets/tileset/1.tmx")
+competences = {"education" : 100,"sante":100,"finance":100,"ressource":100,"culture":100,"sport":100}
+france = Pays("France",competences,pygame.image.load("assets/France.png"))
+allemagne = Pays("Allemagne",competences,pygame.image.load("assets/allemagne.png"))
+angleterre = Pays("Angleterre",competences,pygame.image.load("assets/angleterre.png"))
+chine = Pays("Chine",competences,pygame.image.load("assets/chine.png"))
+eu = Pays("Etat-unis",competences,pygame.image.load("assets/etat-unis.png"))
+russie = Pays("Russie",competences,pygame.image.load("assets/Russie.png"))
 
 def draw_map(screen, tmx_data):
     tile_width = tmx_data.tilewidth

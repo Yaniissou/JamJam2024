@@ -1,0 +1,184 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "tileset/1.tmx",
+    "expandedProjectPaths": [
+        "tileset",
+        "."
+    ],
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "tileset/1.tmx": {
+            "scale": 0.75,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 492,
+                "y": 440
+            }
+        },
+        "tileset/1.tmx#water_and_island_tiles_v2": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset/2house000042.tsx": {
+            "scaleInDock": 0.125,
+            "scaleInEditor": 1
+        },
+        "tileset/2house0002.tsx": {
+            "scaleInDock": 0.25,
+            "scaleInEditor": 1
+        },
+        "tileset/2house00022.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset/CityBuilder.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset/CityBuilder1.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset/CityBuilder2.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset/City_Transparenjuht.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset/City_Transparent.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset/City_Transparent3.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset/City_Transparent64.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset/City_Transparent_gymnase.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset/assets.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset/assets_spritesheet_v2_free.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset/basic.tsx": {
+            "scaleInDock": 0.75,
+            "scaleInEditor": 1
+        },
+        "tileset/beach_tiles.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset/col.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset/decorations.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset/dirtpath_tiles.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset/rope_fence_tiles.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset/statue.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset/terrain_tiles_v2.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset/terrain_tiles_v3.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset/water_and_island_tiles_v2.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset/water_and_island_tiles_v3.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset/water_animation_demo.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tileset/water_animation_demov2.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.exportedFilePath": "D:/cours/tiled/jamjam24",
+    "last.imagePath": "D:/cours/tiled/jamjam24/tileset",
+    "map.height": 24,
+    "map.lastUsedExportFilter": "Tous les Fichiers (*)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 32,
+    "map.tileWidth": 32,
+    "map.width": 32,
+    "openFiles": [
+        "tileset/1.tmx",
+        "tileset/dirtpath_tiles.tsx",
+        "tileset/beach_tiles.tsx",
+        "tileset/assets.tsx",
+        "tileset/rope_fence_tiles.tsx",
+        "tileset/water_animation_demo.tsx",
+        "tileset/terrain_tiles_v2.tsx",
+        "tileset/terrain_tiles_v3.tsx",
+        "tileset/water_and_island_tiles_v3.tsx",
+        "tileset/assets_spritesheet_v2_free.tsx",
+        "tileset/water_animation_demov2.tsx",
+        "tileset/2house000042.tsx",
+        "tileset/CityBuilder.tsx",
+        "tileset/CityBuilder1.tsx",
+        "tileset/CityBuilder2.tsx",
+        "tileset/City_Transparent64.tsx",
+        "tileset/City_Transparent3.tsx",
+        "tileset/City_Transparent_gymnase.tsx",
+        "tileset/col.tsx",
+        "tileset/statue.tsx"
+    ],
+    "project": "1.tiled-project",
+    "recentFiles": [
+        "tileset/statue.tsx",
+        "tileset/col.tsx",
+        "tileset/City_Transparent_gymnase.tsx",
+        "tileset/City_Transparent3.tsx",
+        "tileset/City_Transparent64.tsx",
+        "tileset/CityBuilder2.tsx",
+        "tileset/CityBuilder1.tsx",
+        "tileset/CityBuilder.tsx",
+        "tileset/2house000042.tsx",
+        "tileset/water_animation_demov2.tsx",
+        "tileset/assets_spritesheet_v2_free.tsx",
+        "tileset/water_and_island_tiles_v3.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 32,
+        "width": 32
+    },
+    "tileset.transparentColor": "#898989",
+    "tileset.useTransparentColor": false
+}

@@ -8,3 +8,4 @@ class GameState(Enum):
     SELECTING_COUNTRY = 4
     START_GAME = 5
     IN_GAME = 6
+    CREDITS = 7

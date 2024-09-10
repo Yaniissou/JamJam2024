@@ -1,17 +1,22 @@
+#imports
 import pygame
 import pytmx
 from objects import GameState
 from objects.player import Player
 from objects.button import Button
 from objects.Pays import Pays
+
+#init de la fenêtre
 pygame.init()
 window_width = 1024
 window_height = 768
 window = pygame.display.set_mode((window_width, window_height))
+
 clock = pygame.time.Clock()
 running = True
 name = ""
 gamestate = GameState.GameState.ENTRYPOINT
+
 player = Player(125, 680)
 player.image = pygame.transform.scale(player.image, (32, 32))
 titlefont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 72)
@@ -20,6 +25,7 @@ parentheseFont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 24)
 GRIS = (229, 231, 230)
 ORANGE_PALE = (238, 230, 216)
 MARRON_FONCE = (147,68,26)
+
 ruleBtn = Button(260,680, pygame.image.load("assets/btn_regle_496.png"))
 startButton = Button(window_width / 1.6, window_height / 1.50, pygame.image.load("./assets/btn_start.png"))
 creditButton = Button(window_width / 1.6, window_height/1.1, pygame.image.load("./assets/credits.png"))
@@ -32,6 +38,7 @@ startButton.image = pygame.transform.scale(startButton.image,(246,78))
 creditButton.image = pygame.transform.scale(creditButton.image,(246,78))
 ruleBtn.image = pygame.transform.scale(ruleBtn.image,(246,78))
 nameButton.image = pygame.transform.scale(nameButton.image,(246,78))
+
 competences = {"education" : 100,"sante":100,"finance":100,"ressource":100,"culture":100,"sport":100}
 france = Pays("France",competences,pygame.image.load("assets/france.png"))
 allemagne = Pays("Allemagne",competences,pygame.image.load("assets/allemagne.png"))
@@ -40,8 +47,10 @@ chine = Pays("Chine",competences,pygame.image.load("assets/chine.png"))
 eu = Pays("Etat-unis",competences,pygame.image.load("assets/etats_unis.png"))
 russie = Pays("Russie",competences,pygame.image.load("assets/russie.png"))
 selected_country = None
-tmx_data = pytmx.util_pygame.load_pygame("assets/map/tileset/1.tmx")
 
+#définit la map
+tmx_data = pytmx.util_pygame.load_pygame("assets/map/tileset/1.tmx")
+#et la dessine
 def draw_map(screen, tmx_data):
     tile_width = tmx_data.tilewidth
     tile_height = tmx_data.tileheight
@@ -65,6 +74,8 @@ def get_collision_tiles(tmx_data, layer_name):
                                                    tmx_data.tilewidth,
                                                    tmx_data.tileheight))
     return collision_tiles
+
+#menu titre
 def initMenu():
     background = pygame.image.load("./assets/menu-background.png")
 
@@ -78,6 +89,7 @@ def initMenu():
     creditButton.draw(window)
     ruleBtn.draw(window)
 
+#affiche les règles
 def initRule():
     background = pygame.image.load("./assets/menu-background.png")
     titletext = titlefont.render("Regles", False, (0, 0, 0))
@@ -94,6 +106,8 @@ def initRule():
         content = textFont.render(line, False, (0, 0, 0))
         window.blit(content, (window_width / 2 - content.get_width() / 2, y_offset))
         y_offset += content.get_height() + 10
+
+#affiche les crédits
 def initCredits():
     background = pygame.image.load("./assets/menu-background.png")
 
@@ -134,6 +148,7 @@ def initCredits():
         window.blit(content, (window_width / 2 - content.get_width() / 2, y_offset))
         y_offset += content.get_height() + 10
 
+#menu pour choisir le pseudo
 def choosePseudo(name):
     titletext = titlefont.render("Choisir un pseudo", False, (0, 0, 0))
     titletext_rect = titletext.get_rect()
@@ -151,6 +166,7 @@ def choosePseudo(name):
     window.blit(parentheseText,parentheseText_rect)
     nameButton.draw(window)
 
+#menu pour choisir le pays
 def selectCountry():
     global selected_country
     imgPlayer = pygame.image.load("assets/testPlayer.png")
@@ -179,6 +195,7 @@ def selectCountry():
             window.blit(imgPlayer,(window_width / 4, window_height / 1.6))
     window.blit(titletext, titletext_rect)
 
+#fonctions du jeu
 def inGame():
     draw_map(window, tmx_data)
     collision_tilesBatiment = get_collision_tiles(tmx_data, "batiments")

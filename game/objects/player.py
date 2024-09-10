@@ -7,7 +7,7 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.image.load("assets/tile000.png")
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
-        self.vitesse = 7
+        self.vitesse = 3
 
     def deplacer(self):
         keys = pygame.key.get_pressed()

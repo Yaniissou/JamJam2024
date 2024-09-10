@@ -20,6 +20,7 @@ parentheseFont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 24)
 GRIS = (229, 231, 230)
 ORANGE_PALE = (238, 230, 216)
 MARRON_FONCE = (147,68,26)
+ruleBtn = Button(260,680, pygame.image.load("assets/btn_regle_496.png"))
 startButton = Button(window_width / 1.6, window_height / 1.50, pygame.image.load("./assets/btn_start.png"))
 creditButton = Button(window_width / 1.6, window_height/1.1, pygame.image.load("./assets/btn_start.png"))
 nameButton =  Button(window_width / 1.6, window_height / 1.25, pygame.image.load("./assets/btn_valider.png"))
@@ -27,7 +28,7 @@ countryBtnconfirm = Button(window_width / 1.1, window_height / 1.1, pygame.image
 countryBtnconfirm.image = pygame.transform.scale(nameButton.image,(246,78))
 startButton.image = pygame.transform.scale(startButton.image,(246,78))
 creditButton.image = pygame.transform.scale(creditButton.image,(246,78))
-
+ruleBtn.image = pygame.transform.scale(ruleBtn.image,(246,78))
 nameButton.image = pygame.transform.scale(nameButton.image,(246,78))
 competences = {"education" : 100,"sante":100,"finance":100,"ressource":100,"culture":100,"sport":100}
 france = Pays("France",competences,pygame.image.load("assets/france.png"))
@@ -73,8 +74,24 @@ def initMenu():
     window.blit(titletext, titletext_rect)
     startButton.draw(window)
     creditButton.draw(window)
+    ruleBtn.draw(window)
 
+def initRule():
+    background = pygame.image.load("./assets/menu-background.png")
+    titletext = titlefont.render("Regles", False, (0, 0, 0))
+    titletext_rect = titletext.get_rect()
+    titletext_rect.center = (window_width / 2, window_height / 8 - 50)
 
+    regleText =  ("Alors que les differentes nations |du monde sont en pleine expansion,| plusieurs territoires |sont encore a departager !| A vous de montrer que votre pays |est le plus a meme| a obtenir ces terres. |explorer la map| et augmentez vos competences | afin de prendre possesion |des differente structure du territoire | pour gagner la partie :)")
+    lines = regleText.split('|')
+    y_offset = window_height / 6
+
+    window.blit(background, (0, 0))
+    window.blit(titletext,titletext_rect)
+    for line in lines:
+        content = textFont.render(line, False, (0, 0, 0))
+        window.blit(content, (window_width / 2 - content.get_width() / 2, y_offset))
+        y_offset += content.get_height() + 10
 def initCredits():
     background = pygame.image.load("./assets/menu-background.png")
 
@@ -183,10 +200,12 @@ while running:
             gamestate = GameState.GameState.CHOOSE_PSEUDO
         elif creditButton.isClicked():
             gamestate = GameState.GameState.CREDITS
-
+        elif ruleBtn.isClicked():
+            gamestate = GameState.GameState.RULE
     elif gamestate == GameState.GameState.CREDITS:
         initCredits()
-
+    elif gamestate == GameState.GameState.RULE:
+        initRule()
     elif gamestate == GameState.GameState.CHOOSE_PSEUDO:
         choosePseudo(name)
         if nameButton.isClicked() and name != "":

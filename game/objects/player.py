@@ -8,6 +8,12 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
         self.vitesse = 3
+        #test
+        self.hitbox = self.rect.inflate(100,100)
+
+    #more test
+    def update(self):
+        self.hitbox.center = self.rect.center
 
     def deplacer(self):
         keys = pygame.key.get_pressed()

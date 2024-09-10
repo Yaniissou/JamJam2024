@@ -160,6 +160,11 @@ def inGame():
             player.rect = previous_position
     window.blit(player.image, player.rect)
 
+#vérifier que deux sprites s'overlap
+#fonction test jsp si elle marche
+def collisionCheck(self, sprite1, sprite2):
+    return pygame.sprite.collide_rect(sprite1, sprite2)
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

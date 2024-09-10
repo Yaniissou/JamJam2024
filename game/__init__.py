@@ -21,6 +21,7 @@ GRIS = (229, 231, 230)
 ORANGE_PALE = (238, 230, 216)
 MARRON_FONCE = (147,68,26)
 startButton = Button(window_width / 1.6, window_height / 1.25, pygame.image.load("./assets/btn_start.png"))
+creditButton = Button(window_width / 1.6, window_height / 1.50, pygame.image.load("./assets/btn_start.png"))
 nameButton =  Button(window_width / 1.6, window_height / 1.25, pygame.image.load("./assets/btn_valider.png"))
 countryBtnconfirm = Button(window_width / 1.1, window_height / 1.1, pygame.image.load("./assets/btn_valider.png"))
 countryBtnconfirm.image = pygame.transform.scale(nameButton.image,(246,78))
@@ -57,6 +58,32 @@ def initMenu():
     window.blit(background, (0, 0))
     window.blit(titletext, titletext_rect)
     startButton.draw(window)
+    creditButton.draw(window)
+
+
+def initCredits():
+    background = pygame.image.load("./assets/menu-background.png")
+
+    titletext = titlefont.render("Credits", False, (0, 0, 0))
+    titletext_rect = titletext.get_rect()
+    titletext_rect.center = (window_width / 2, window_height / 6)
+
+    credits_content = ("Yanis Harkati : Developpeur|"
+                       "Ilan Darmon : Developpeur|"
+                       "Rachel Peretti : Developpeuse|"
+                       "Idibei Hassan : Administrateur reseau|"
+                       "Tom Jochum : Directeur artistique")
+
+    lines = credits_content.split('|')
+
+    window.blit(background, (0, 0))
+    window.blit(titletext, titletext_rect)
+
+    y_offset = window_height / 2
+    for line in lines:
+        content = textFont.render(line, False, (0, 0, 0))
+        window.blit(content, (window_width / 2 - content.get_width() / 2, y_offset))
+        y_offset += content.get_height() + 10  # Ajouter un espace entre les lignes
 
 def choosePseudo(name):
     titletext = titlefont.render("Choisir un pseudo", False, (0, 0, 0))
@@ -124,6 +151,11 @@ while running:
         initMenu()
         if startButton.isClicked():
             gamestate = GameState.GameState.CHOOSE_PSEUDO
+        elif creditButton.isClicked():
+            gamestate = GameState.GameState.CREDITS
+
+    elif gamestate == GameState.GameState.CREDITS:
+        initCredits()
 
     elif gamestate == GameState.GameState.CHOOSE_PSEUDO:
         choosePseudo(name)

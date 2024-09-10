@@ -22,7 +22,9 @@ ORANGE_PALE = (238, 230, 216)
 MARRON_FONCE = (147,68,26)
 ruleBtn = Button(260,680, pygame.image.load("assets/btn_regle_496.png"))
 startButton = Button(window_width / 1.6, window_height / 1.50, pygame.image.load("./assets/btn_start.png"))
-creditButton = Button(window_width / 1.6, window_height/1.1, pygame.image.load("./assets/btn_start.png"))
+creditButton = Button(window_width / 1.6, window_height/1.1, pygame.image.load("./assets/credits.png"))
+backButton = Button(300, 200, pygame.image.load("./assets/retour.png"))
+backButton.image = pygame.transform.scale(backButton.image,(150,106))
 nameButton =  Button(window_width / 1.6, window_height / 1.25, pygame.image.load("./assets/btn_valider.png"))
 countryBtnconfirm = Button(window_width / 1.1, window_height / 1.1, pygame.image.load("./assets/btn_valider.png"))
 countryBtnconfirm.image = pygame.transform.scale(nameButton.image,(246,78))
@@ -99,19 +101,35 @@ def initCredits():
     titletext_rect = titletext.get_rect()
     titletext_rect.center = (window_width / 2, window_height / 6)
 
-    credits_content = ("Yanis Harkati : Developpeur|"
+    sourcetitle = titlefont.render("Sources", False, (0, 0, 0))
+    sourcetitle_rect = sourcetitle.get_rect()
+    sourcetitle_rect.center = (window_width, window_height)
+
+    devcontent = ("Yanis Harkati : Developpeur|"
                        "Ilan Darmon : Developpeur|"
                        "Rachel Peretti : Developpeuse|"
                        "Idibei Hassan : Administrateur reseau|"
                        "Tom Jochum : Directeur artistique")
 
-    lines = credits_content.split('|')
+    devlines = devcontent.split('|')
+
+    sourcecontent = ("Ecole : poppants|"
+                     "Decor : schwarnhild|"
+                     "Terrain de foot : davidevitali|")
+
+    sourcelines = sourcecontent.split("|")
+
 
     window.blit(background, (0, 0))
     window.blit(titletext, titletext_rect)
+    backButton.draw(window)
+    y_offset = window_height /4
+    for line in devlines:
+        content = textFont.render(line, False, (0, 0, 0))
+        window.blit(content, (window_width / 2 - content.get_width() / 2, y_offset))
+        y_offset += content.get_height() + 10
 
-    y_offset = window_height / 2
-    for line in lines:
+    for line in sourcelines:
         content = textFont.render(line, False, (0, 0, 0))
         window.blit(content, (window_width / 2 - content.get_width() / 2, y_offset))
         y_offset += content.get_height() + 10
@@ -204,6 +222,9 @@ while running:
             gamestate = GameState.GameState.RULE
     elif gamestate == GameState.GameState.CREDITS:
         initCredits()
+        if backButton.isClicked() and gamestate == GameState.GameState.CREDITS:
+            gamestate = GameState.GameState.ENTRYPOINT
+
     elif gamestate == GameState.GameState.RULE:
         initRule()
     elif gamestate == GameState.GameState.CHOOSE_PSEUDO:

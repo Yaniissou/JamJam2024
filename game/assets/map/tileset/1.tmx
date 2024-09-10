@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="32" height="24" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="1">
  <editorsettings>
-  <export target="../../../../../../cours/tiled/jamjam24/export map/1..tmx" format="tmx"/>
+  <export format="tmx"/>
  </editorsettings>
  <tileset firstgid="1" name="water_and_island_tiles_v2" tilewidth="30" tileheight="30" tilecount="128" columns="16">
   <grid orientation="orthogonal" width="32" height="32"/>

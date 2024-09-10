@@ -152,8 +152,9 @@ def inGame():
     collision_tilesMer = get_collision_tiles(tmx_data, "mer")
 
     collision_tiles = collision_tilesBatiment + collision_tilesPalmier + collision_tilesBordure + collision_tilesMer
-    player.deplacer()
     previous_position = player.rect.copy()
+    player.deplacer()
+
     for tile in collision_tiles:
         if player.rect.colliderect(tile):
             player.rect = previous_position

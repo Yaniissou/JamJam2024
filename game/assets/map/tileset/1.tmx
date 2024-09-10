@@ -26,7 +26,6 @@
  <tileset firstgid="2050" source="City_Transparent3.tsx"/>
  <tileset firstgid="2210" source="City_Transparent_gymnase.tsx"/>
  <tileset firstgid="2370" source="col.tsx"/>
- <tileset firstgid="2376" source="statue.tsx"/>
  <tileset firstgid="2376" source="2D Soccer.tsx"/>
  <layer id="1" name="mer" width="32" height="24">
   <data encoding="csv">

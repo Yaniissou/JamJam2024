@@ -12,7 +12,7 @@ clock = pygame.time.Clock()
 running = True
 name = ""
 gamestate = GameState.GameState.ENTRYPOINT
-player = Player(125, 700)
+player = Player(125, 680)
 player.image = pygame.transform.scale(player.image, (32, 32))
 titlefont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 72)
 textFont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 48)
@@ -50,6 +50,18 @@ def draw_map(screen, tmx_data):
                 if tile:
                     screen.blit(tile, (x * tile_width, y * tile_height))
 
+def get_collision_tiles(tmx_data, layer_name):
+    collision_tiles = []
+    layer = tmx_data.get_layer_by_name(layer_name)
+
+    if isinstance(layer, pytmx.TiledTileLayer):
+        for x, y, gid in layer:
+            if gid != 0:
+                collision_tiles.append(pygame.Rect(x * tmx_data.tilewidth,
+                                                   y * tmx_data.tileheight,
+                                                   tmx_data.tilewidth,
+                                                   tmx_data.tileheight))
+    return collision_tiles
 def initMenu():
     background = pygame.image.load("./assets/menu-background.png")
 
@@ -85,7 +97,7 @@ def initCredits():
     for line in lines:
         content = textFont.render(line, False, (0, 0, 0))
         window.blit(content, (window_width / 2 - content.get_width() / 2, y_offset))
-        y_offset += content.get_height() + 10  # Ajouter un espace entre les lignes
+        y_offset += content.get_height() + 10
 
 def choosePseudo(name):
     titletext = titlefont.render("Choisir un pseudo", False, (0, 0, 0))
@@ -133,8 +145,18 @@ def selectCountry():
     window.blit(titletext, titletext_rect)
 
 def inGame():
-    draw_map(window,tmx_data)
+    draw_map(window, tmx_data)
+    collision_tilesBatiment = get_collision_tiles(tmx_data, "batiments")
+    collision_tilesPalmier = get_collision_tiles(tmx_data, "palmier")
+    collision_tilesBordure = get_collision_tiles(tmx_data, "bordure")
+    collision_tilesMer = get_collision_tiles(tmx_data, "mer")
+
+    collision_tiles = collision_tilesBatiment + collision_tilesPalmier + collision_tilesBordure + collision_tilesMer
     player.deplacer()
+    previous_position = player.rect.copy()
+    for tile in collision_tiles:
+        if player.rect.colliderect(tile):
+            player.rect = previous_position
     window.blit(player.image, player.rect)
 
 while running:

@@ -2,14 +2,13 @@ import pygame
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y,competences):
         super().__init__()
         self.image = pygame.image.load("assets/tile000.png")
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
         self.vitesse = 3
-        #test
-        self.hitbox = self.rect.inflate(100,100)
+        self.competences = competences
 
     #more test
     def update(self):

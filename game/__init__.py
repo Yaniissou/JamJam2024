@@ -1,27 +1,24 @@
-#imports
 import pygame
 import pytmx
 from objects import GameState
+from objects import Competences
 from objects.player import Player
 from objects.button import Button
 from objects.Pays import Pays
-
-#init de la fenêtre
+from objects.Structure import Structure
 pygame.init()
 window_width = 1024
 window_height = 768
 window = pygame.display.set_mode((window_width, window_height))
-
 clock = pygame.time.Clock()
 running = True
 name = ""
-gamestate = GameState.GameState.ENTRYPOINT
+gamestate = GameState.GameState.IN_GAME
 
-player = Player(125, 680)
-player.image = pygame.transform.scale(player.image, (32, 32))
 titlefont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 72)
 textFont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 48)
 parentheseFont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 24)
+
 GRIS = (229, 231, 230)
 ORANGE_PALE = (238, 230, 216)
 MARRON_FONCE = (147,68,26)
@@ -30,6 +27,7 @@ ruleBtn = Button(260,680, pygame.image.load("assets/btn_regle_496.png"))
 startButton = Button(window_width / 1.6, window_height / 1.50, pygame.image.load("./assets/btn_start.png"))
 creditButton = Button(window_width / 1.6, window_height/1.1, pygame.image.load("./assets/credits.png"))
 backButton = Button(300, 200, pygame.image.load("./assets/retour.png"))
+
 backButton.image = pygame.transform.scale(backButton.image,(150,106))
 nameButton =  Button(window_width / 1.6, window_height / 1.25, pygame.image.load("./assets/btn_valider.png"))
 countryBtnconfirm = Button(window_width / 1.1, window_height / 1.1, pygame.image.load("./assets/btn_valider.png"))
@@ -39,18 +37,29 @@ creditButton.image = pygame.transform.scale(creditButton.image,(246,78))
 ruleBtn.image = pygame.transform.scale(ruleBtn.image,(246,78))
 nameButton.image = pygame.transform.scale(nameButton.image,(246,78))
 
-competences = {"education" : 100,"sante":100,"finance":100,"ressource":100,"culture":100,"sport":100}
+competences = {0 : 100,1 : 100,2 : 100,3 : 100,4 : 100,5 : 100}
+
 france = Pays("France",competences,pygame.image.load("assets/france.png"))
 allemagne = Pays("Allemagne",competences,pygame.image.load("assets/allemagne.png"))
 angleterre = Pays("Angleterre",competences,pygame.image.load("assets/uk.png"))
 chine = Pays("Chine",competences,pygame.image.load("assets/chine.png"))
 eu = Pays("Etat-unis",competences,pygame.image.load("assets/etats_unis.png"))
 russie = Pays("Russie",competences,pygame.image.load("assets/russie.png"))
-selected_country = None
 
-#définit la map
+selected_country = None
 tmx_data = pytmx.util_pygame.load_pygame("assets/map/tileset/1.tmx")
-#et la dessine
+take_speed = 5
+col_active = False
+
+player = Player(125, 680,competences)
+player.image = pygame.transform.scale(player.image, (32, 32))
+
+hopital = Structure("hopital",Competences.Competences.SANTE,300,None)
+ecole = Structure("ecole",Competences.Competences.EDUCATION,300,None)
+banque = Structure("banque",Competences.Competences.FINANCE,300,None)
+puit = Structure("puit",Competences.Competences.RESSOURCES_NATURELLES,300,None)
+stade = Structure("stade",Competences.Competences.SPORT,300,None)
+musee = Structure("musee",Competences.Competences.CULTURE,300,None)
 def draw_map(screen, tmx_data):
     tile_width = tmx_data.tilewidth
     tile_height = tmx_data.tileheight
@@ -74,8 +83,6 @@ def get_collision_tiles(tmx_data, layer_name):
                                                    tmx_data.tilewidth,
                                                    tmx_data.tileheight))
     return collision_tiles
-
-#menu titre
 def initMenu():
     background = pygame.image.load("./assets/menu-background.png")
 
@@ -89,7 +96,6 @@ def initMenu():
     creditButton.draw(window)
     ruleBtn.draw(window)
 
-#affiche les règles
 def initRule():
     background = pygame.image.load("./assets/menu-background.png")
     titletext = titlefont.render("Regles", False, (0, 0, 0))
@@ -106,8 +112,6 @@ def initRule():
         content = textFont.render(line, False, (0, 0, 0))
         window.blit(content, (window_width / 2 - content.get_width() / 2, y_offset))
         y_offset += content.get_height() + 10
-
-#affiche les crédits
 def initCredits():
     background = pygame.image.load("./assets/menu-background.png")
 
@@ -148,7 +152,6 @@ def initCredits():
         window.blit(content, (window_width / 2 - content.get_width() / 2, y_offset))
         y_offset += content.get_height() + 10
 
-#menu pour choisir le pseudo
 def choosePseudo(name):
     titletext = titlefont.render("Choisir un pseudo", False, (0, 0, 0))
     titletext_rect = titletext.get_rect()
@@ -166,7 +169,6 @@ def choosePseudo(name):
     window.blit(parentheseText,parentheseText_rect)
     nameButton.draw(window)
 
-#menu pour choisir le pays
 def selectCountry():
     global selected_country
     imgPlayer = pygame.image.load("assets/testPlayer.png")
@@ -195,7 +197,62 @@ def selectCountry():
             window.blit(imgPlayer,(window_width / 4, window_height / 1.6))
     window.blit(titletext, titletext_rect)
 
-#fonctions du jeu
+def circleZone():
+    collision_tiles_musee = get_collision_tiles(tmx_data,"culture_cercle")
+    collision_tiles_hopital = get_collision_tiles(tmx_data,"hopital_cercle")
+    collision_tiles_ecole = get_collision_tiles(tmx_data,"ecole_cercle")
+    collision_tiles_sport = get_collision_tiles(tmx_data,"stade_cercle")
+    collision_tiles_puit = get_collision_tiles(tmx_data,"puit_cercle")
+    collision_tiles_banque = get_collision_tiles(tmx_data,"banque_cercle")
+
+    collision_tiles = collision_tiles_musee + collision_tiles_hopital + collision_tiles_ecole + collision_tiles_sport + collision_tiles_puit + collision_tiles_banque
+    for tile in collision_tiles:
+        s = pygame.Surface((32,32))
+        s.set_alpha(70)
+        s.fill((50, 158, 168))
+        window.blit(s,(tile.x,tile.y))
+
+def take():
+    global take_speed
+    global col_active
+    timer_event = pygame.USEREVENT + 1
+    charge_state = 0
+    charge_speed = 0
+    musee.coll_zone = get_collision_tiles(tmx_data, "culture_zone")
+    hopital.coll_zone = get_collision_tiles(tmx_data, "hopital_zone")
+    ecole.coll_zone = get_collision_tiles(tmx_data, "ecole_zone")
+    stade.coll_zone = get_collision_tiles(tmx_data, "stade_zone")
+    puit.coll_zone = get_collision_tiles(tmx_data, "puit_zone")
+    banque.coll_zone = get_collision_tiles(tmx_data, "banque_zone")
+    strucGroupe = [musee,hopital, ecole,stade,puit,banque]
+    anyCol = False
+    for structure in strucGroupe:
+        for tile in structure.coll_zone:
+            charge_speed = player.competences[structure.competence.value] / take_speed
+
+            if player.rect.colliderect(tile):
+                anyCol = True
+                if not col_active:
+                    col_active = True
+                    pygame.time.set_timer(timer_event, 1000)
+                    print(f"Collision détectée : {col_active}")
+
+            if charge_state >= structure.lifePole and col_active:
+                print("Claim " + structure.nom)
+                col_active = False
+                pygame.time.set_timer(timer_event, 0)
+                charge_state = 0
+
+    if not anyCol and col_active:
+        col_active = False
+        pygame.time.set_timer(timer_event, 0)
+        print(f"Collision terminée : {col_active}")
+
+    if event.type == timer_event:
+        if col_active:
+            charge_state += charge_speed
+            print(charge_state)
+
 def inGame():
     draw_map(window, tmx_data)
     collision_tilesBatiment = get_collision_tiles(tmx_data, "batiments")
@@ -211,12 +268,8 @@ def inGame():
         if player.rect.colliderect(tile):
             player.rect = previous_position
     window.blit(player.image, player.rect)
-
-#vérifier que deux sprites s'overlap
-#fonction test jsp si elle marche
-def collisionCheck(self, sprite1, sprite2):
-    return pygame.sprite.collide_rect(sprite1, sprite2)
-
+    circleZone()
+    take()
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

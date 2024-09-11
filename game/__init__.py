@@ -1,5 +1,6 @@
 import pygame
 import pytmx
+import random
 from objects import GameState
 from objects import Competences
 from objects.player import Player
@@ -154,6 +155,7 @@ def initCredits():
         content = textFont.render(line, False, (0, 0, 0))
         window.blit(content, (window_width / 2 - content.get_width() / 2, y_offset))
         y_offset += content.get_height() + 10
+
 
 def choosePseudo(name):
     titletext = titlefont.render("Choisir un pseudo", False, (0, 0, 0))
@@ -315,4 +317,3 @@ while running:
 
     pygame.display.update()
     clock.tick(60)
-

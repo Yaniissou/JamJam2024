@@ -23,6 +23,7 @@ time_diff = pygame.time.get_ticks()
 minigame = False
 
 titlefont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 72)
+littleTitlefont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 52)
 textFont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 48)
 parentheseFont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 24)
 
@@ -34,6 +35,7 @@ ruleBtn = Button(260,680, pygame.image.load("assets/btn_regle_496.png"))
 startButton = Button(window_width / 1.6, window_height / 1.50, pygame.image.load("./assets/btn_start.png"))
 creditButton = Button(1000,680, pygame.image.load("./assets/credits.png"))
 backButton = Button(300, 200, pygame.image.load("./assets/retour.png"))
+replayBtn =  Button(630,530, pygame.image.load("assets/btn_regle_496.png"))
 
 backButton.image = pygame.transform.scale(backButton.image,(150,106))
 nameButton =  Button(window_width / 1.6, window_height / 1.25, pygame.image.load("./assets/btn_valider.png"))
@@ -43,6 +45,7 @@ startButton.image = pygame.transform.scale(startButton.image,(246,78))
 creditButton.image = pygame.transform.scale(creditButton.image,(246,78))
 ruleBtn.image = pygame.transform.scale(ruleBtn.image,(246,78))
 nameButton.image = pygame.transform.scale(nameButton.image,(246,78))
+replayBtn.image = pygame.transform.scale(ruleBtn.image,(246,78))
 
 competences = {0 : 1.2,1 : 1.4,2 : 1,3 : 0.8,4 : 1,5 : 1}
 
@@ -59,6 +62,8 @@ selected_country_nation = None
 tmx_data = pytmx.util_pygame.load_pygame("assets/map/tileset/1.tmx")
 take_speed = 5
 col_active = False
+count_struc_complete = 0
+list_struc_complete = []
 
 images_sprite_france = [ pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"),
                          pygame.image.load("./assets/sprite_france/run_down_fr/sprite_1.png"),
@@ -80,7 +85,7 @@ images_sprite_allemagne= [ pygame.image.load("./assets/sprite_allemagne/run_down
                          pygame.image.load("./assets/sprite_allemagne/run_up_all/sprite_1.png")]
 
 
-player = Player(125, 680,competences,60,None,images_sprite_france)
+player = Player(125, 680,competences,60,None,images_sprite_france,0)
 imgPlayer = france.imgPlayer
 imgPlayer = pygame.transform.scale(imgPlayer,(192,192))
 
@@ -298,8 +303,6 @@ def take():
     global take_speed
     global time_diff
     global strucGroupe
-    timer_event = pygame.USEREVENT + 1
-    charge_speed = 0
     musee.coll_zone = get_collision_tiles(tmx_data, "culture_zone")
     hopital.coll_zone = get_collision_tiles(tmx_data, "hopital_zone")
     ecole.coll_zone = get_collision_tiles(tmx_data, "ecole_zone")
@@ -355,9 +358,17 @@ def take():
         structure.col_active = False
         print(f"Collision terminée : {structure.col_active}")
 
-items = generate_items(5)
+items = generate_items(20)
 
+def inList(list,elem):
+    for l in list:
+        if l == elem:
+            return True
+    return False
 def inGame():
+    global count_struc_complete
+    global gamestate
+    global list_struc_complete
     player.country = selected_country
     player.competences = player.country.competences
     if player.country == allemagne:
@@ -382,9 +393,79 @@ def inGame():
     window.blit(titletext,titletext_rect)
     circleZone()
     take()
+
+    for struc in strucGroupe:
+        if struc.isCLaim and not inList(list_struc_complete,struc):
+            count_struc_complete +=1
+            list_struc_complete.append(struc)
+            print(count_struc_complete)
+
+    if count_struc_complete == 6:
+        gamestate = GameState.GameState.WIN
+
     for item in items:
         item.draw(window)
     checkItemCollisions(player, items)
+
+def resetGame():
+    global music_started
+    global minigame
+    global selected_country
+    global selected_country_nation
+    global col_active
+    global count_struc_complete
+    global list_struc_complete
+    global player
+    global imgPlayer
+    global hopital
+    global banque
+    global ecole
+    global puit
+    global stade
+    global musee
+    global items
+    music_started = False
+    minigame = False
+    selected_country = None
+    selected_country_nation = None
+    col_active = False
+    count_struc_complete = 0
+    list_struc_complete = []
+
+    player = Player(125, 680, competences, 60, None, images_sprite_france, 0)
+    imgPlayer = france.imgPlayer
+    imgPlayer = pygame.transform.scale(imgPlayer, (192, 192))
+
+    hopital = Structure("hopital", Competences.Competences.SANTE, 100, None, False, 0, False)
+    ecole = Structure("ecole", Competences.Competences.EDUCATION, 100, None, False, 0, False)
+    banque = Structure("banque", Competences.Competences.FINANCE, 100, None, False, 0, False)
+    puit = Structure("puit", Competences.Competences.RESSOURCES_NATURELLES, 100, None, False, 0, False)
+    stade = Structure("stade", Competences.Competences.SPORT, 100, None, False, 0, False)
+    musee = Structure("musee", Competences.Competences.CULTURE, 100, None, False, 0, False)
+    items = []
+    items = generate_items(20)
+
+def initWin():
+    global gamestate
+    global music_started
+    s = pygame.Surface((window_width/2, window_height/2))
+    s.set_alpha(70)
+    s.fill(GRIS)
+    titletext = littleTitlefont.render("Vous avez gagner", False, (0, 0, 0))
+    titletext_rect = titletext.get_rect()
+    titletext_rect.center = (window_width / 2, window_height / 3)
+    if replayBtn.isClicked():
+        gamestate = GameState.GameState.SELECTING_COUNTRY
+        resetGame()
+        pygame.mixer.music.stop()
+        if not music_started:
+            pygame.mixer.music.load("assets/sound/zic intro.mp3")
+            pygame.mixer.music.play(-1)
+            music_started = True
+
+    window.blit(s, (window_width/4, window_height/4))
+    window.blit(titletext,titletext_rect)
+    replayBtn.draw(window)
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -442,6 +523,8 @@ while running:
             music_started = False
     elif gamestate == GameState.GameState.IN_GAME:
         inGame()
+    elif gamestate == GameState.GameState.WIN:
+        initWin()
 
 
     pygame.display.update()

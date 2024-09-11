@@ -10,3 +10,4 @@ class GameState(Enum):
     IN_GAME = 6
     CREDITS = 7
     RULE = 8
+    WIN = 9

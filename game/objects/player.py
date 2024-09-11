@@ -2,7 +2,7 @@ import pygame
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y,competences,etoile,country,images):
+    def __init__(self, x, y,competences,etoile,country,images,countClaim):
         super().__init__()
         self.image_index = 0
         self.images = images

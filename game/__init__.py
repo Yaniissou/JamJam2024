@@ -451,7 +451,7 @@ def initWin():
     s = pygame.Surface((window_width/2, window_height/2))
     s.set_alpha(70)
     s.fill(GRIS)
-    titletext = littleTitlefont.render("Vous avez gagner", False, (0, 0, 0))
+    titletext = littleTitlefont.render("Vous avez gagné", False, (0, 0, 0))
     titletext_rect = titletext.get_rect()
     titletext_rect.center = (window_width / 2, window_height / 3)
     if replayBtn.isClicked():

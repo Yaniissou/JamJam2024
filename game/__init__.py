@@ -6,6 +6,8 @@ from objects.player import Player
 from objects.button import Button
 from objects.Pays import Pays
 from objects.Structure import Structure
+from objects.ChargeState import ChargeState
+from objects.Col_active import Col
 import random
 
 from game.objects.mapItem import MapItem
@@ -86,16 +88,19 @@ images_sprite_allemagne= [ pygame.image.load("./assets/sprite_allemagne/run_down
                          pygame.image.load("./assets/sprite_allemagne/run_up_all/sprite_1.png")]
 
 
-player = Player(125, 680,competences,60,None,images_sprite_france,0)
+player = Player(125, 680,competences,60,None,images_sprite_france,0,)
+player2 = Player(145, 680,competences,60,None,images_sprite_france,0)
+
 imgPlayer = france.imgPlayer
 imgPlayer = pygame.transform.scale(imgPlayer,(192,192))
 
-hopital = Structure("hopital",Competences.Competences.SANTE,100,None,False,0,False)
-ecole = Structure("ecole",Competences.Competences.EDUCATION,100,None,False,0,False)
-banque = Structure("banque",Competences.Competences.FINANCE,100,None,False,0,False)
-puit = Structure("puit",Competences.Competences.RESSOURCES,100,None,False,0,False)
-stade = Structure("stade",Competences.Competences.SPORT,100,None,False,0,False)
-musee = Structure("musee",Competences.Competences.CULTURE,100,None,False,0,False)
+
+hopital = Structure("hopital",Competences.Competences.SANTE,100,100,None,False,0,0,False,False)
+ecole = Structure("ecole",Competences.Competences.EDUCATION,100,100,None,False,0,0,False,False)
+banque = Structure("banque",Competences.Competences.FINANCE,100,100,None,False,0,0,False,False)
+puit = Structure("puit",Competences.Competences.RESSOURCES,100,100,None,False,0,0,False,False)
+stade = Structure("stade",Competences.Competences.SPORT,100,100,None,False,0,0,False,False)
+musee = Structure("musee",Competences.Competences.CULTURE,100,100,None,False,0,0,False,False)
 
 strucGroupe = [musee,hopital, ecole,stade,puit,banque]
 
@@ -317,7 +322,10 @@ def checkItemCollisions(player, items):
             player.etoile +=40
             print("Collision detected!")
             items.remove(item)
-
+        elif player2.rect.colliderect(item.rect):
+            player2.etoile += 40
+            print("Collision detected!")
+            items.remove(item)
 
 def take():
     global take_speed
@@ -330,6 +338,7 @@ def take():
     puit.coll_zone = get_collision_tiles(tmx_data, "puit_zone")
     banque.coll_zone = get_collision_tiles(tmx_data, "banque_zone")
     strucGroupe = [musee,hopital, ecole,stade,puit,banque]
+    #joueur 1
     pygame.draw.rect(window,GRIS,(150,300,100,20))
     pygame.draw.rect(window,GRIS,(210,10,100,20))
     pygame.draw.rect(window,GRIS,(450,10,100,20))
@@ -337,48 +346,98 @@ def take():
     pygame.draw.rect(window,GRIS,(850,50,100,20))
     pygame.draw.rect(window,GRIS,(700,600,100,20))
 
-    pygame.draw.rect(window,(50, 158, 168),(150,300,musee.charge_state,20))
-    pygame.draw.rect(window,(50, 158, 168),(210,10,ecole.charge_state,20))
-    pygame.draw.rect(window,(50, 158, 168),(450,10,banque.charge_state,20))
-    pygame.draw.rect(window,(50, 158, 168),(550,230,stade.charge_state,20))
-    pygame.draw.rect(window,(50, 158, 168),(850,50,hopital.charge_state,20))
-    pygame.draw.rect(window,(50, 158, 168),(700,600,puit.charge_state,20))
+    pygame.draw.rect(window, (50, 158, 168), (150, 300, musee.charge_state_1, 20))
+    pygame.draw.rect(window, (50, 158, 168), (210, 10, ecole.charge_state_1, 20))
+    pygame.draw.rect(window, (50, 158, 168), (450, 10, banque.charge_state_1, 20))
+    pygame.draw.rect(window, (50, 158, 168), (550, 230, stade.charge_state_1, 20))
+    pygame.draw.rect(window, (50, 158, 168), (850, 50, hopital.charge_state_1, 20))
+    pygame.draw.rect(window, (50, 158, 168), (700, 600, puit.charge_state_1, 20))
+
+    #joueur 2
+
+    pygame.draw.rect(window, GRIS, (150, 270, 100, 20))
+    pygame.draw.rect(window, GRIS, (210, 40, 100, 20))
+    pygame.draw.rect(window, GRIS, (450, 40, 100, 20))
+    pygame.draw.rect(window, GRIS, (550, 200, 100, 20))
+    pygame.draw.rect(window, GRIS, (850, 20, 100, 20))
+    pygame.draw.rect(window, GRIS, (700, 570, 100, 20))
+
+
+    pygame.draw.rect(window, (168, 32, 5), (150, 270, musee.charge_state_2, 20))
+    pygame.draw.rect(window, (168, 32, 5), (210, 40, ecole.charge_state_2, 20))
+    pygame.draw.rect(window, (168, 32, 5), (450, 40, banque.charge_state_2, 20))
+    pygame.draw.rect(window, (168, 32, 5), (550, 200, stade.charge_state_2, 20))
+    pygame.draw.rect(window, (168, 32, 5), (850, 20, hopital.charge_state_2, 20))
+    pygame.draw.rect(window, (168, 32, 5), (700, 570, puit.charge_state_2, 20))
     anyCol = False
+    anyCol_2 = False
     for structure in strucGroupe:
         for tile in structure.coll_zone:
             charge_tap = player.competences[structure.competence.value] * player.etoile
 
             if player.rect.colliderect(tile) and not structure.isCLaim:
                 anyCol = True
-                if not structure.col_active:
-                    structure.col_active = True
+                if not structure.col_active_1:
+                    structure.col_active_1 = True
                 else:
-                    previous_charge = structure.charge_state
-                    if structure.charge_state < structure.lifePole:
-                        structure.charge_state += charge_tap
-                        print(f"charge_state: {structure.charge_state}, lifePole: {structure.lifePole}")
+                    previous_charge = structure.charge_state_1
+                    if structure.charge_state_1 < structure.lifePole:
+                        structure.charge_state_1 += charge_tap
+                        print(f"charge_state: {structure.charge_state_1}, lifePole: {structure.lifePole}")
 
-                    if structure.charge_state >= structure.lifePole and structure.col_active:
+                    if structure.charge_state_1 >= structure.lifePole and structure.col_active_1:
                         structure.isCLaim = True
-                        structure.col_active = False
+                        structure.col_active_1 = False
                         diff = structure.lifePole - previous_charge
                         player.etoile -= diff
-                        structure.charge_state = structure.lifePole
+                        structure.charge_state_1 = structure.lifePole
                         print("Structure revendiquée")
                     else:
                         if player.etoile > 0:
-                            diff = structure.lifePole - structure.charge_state
                             player.etoile = 0
                         print(f"Étoiles restantes : {player.etoile}")
             elif not player.rect.colliderect(tile) and not structure.isCLaim:
-                structure.col_active = False
+                structure.col_active_1 = False
 
-
-    if not anyCol and structure.col_active:
+    if not anyCol and structure.col_active_1:
         structure.col_active = False
-        print(f"Collision terminée : {structure.col_active}")
+        print(f"Collision terminée : {structure.col_active_1}")
+        ########################################################################
+#################################################################################
+    for structure in strucGroupe:
+        for tile in structure.coll_zone:
+            charge_tap_2 = player2.competences[structure.competence.value] * player2.etoile
 
+            if player2.rect.colliderect(tile) and not structure.isCLaim:
+                anyCol_2 = True
+                if not structure.col_active_2:
+                    structure.col_active_2 = True
+                else:
+                    previous_charge = structure.charge_state_2
+                    if structure.charge_state_2 < structure.lifePole_2:
+                        structure.charge_state_2 += charge_tap_2
+                        print(f"charge_state: {structure.charge_state_2}, lifePole: {structure.lifePole_2}")
+
+                    if structure.charge_state_2 >= structure.lifePole_2 and structure.col_active_2:
+                        structure.isCLaim = True
+                        structure.col_active_2 = False
+                        diff = structure.lifePole_2 - previous_charge
+                        player2.etoile -= diff
+                        structure.charge_state_2 = structure.lifePole_2
+                        print("Structure revendiquée")
+                    else:
+                        if player2.etoile > 0:
+                            player2.etoile = 0
+                        print(f"Étoiles restantes : {player2.etoile}")
+            elif not player2.rect.colliderect(tile) and not structure.isCLaim:
+                structure.col_active_2 = False
+
+        if not anyCol_2 and structure.col_active_2:
+            structure.col_active_2 = False
+            print(f"Collision terminée : {structure.col_active_2}")
 items = generate_items(20)
+
+
 
 def inList(list,elem):
     for l in list:
@@ -389,14 +448,25 @@ def inGame():
     global count_struc_complete
     global gamestate
     global list_struc_complete
+    global player2
     player.country = selected_country
     player.competences = player.country.competences
+
+    player2.country = selected_country
+    player2.competences = player2.country.competences
+
     if player.country == allemagne:
         player.images = images_sprite_allemagne
+    elif player2.country == allemagne:
+        player2.images = images_sprite_allemagne
 
     titletext = titlefont.render(f"nb etoile :  {player.etoile}", False, (0, 0, 0))
     titletext_rect = titletext.get_rect()
     titletext_rect.center = (window_width / 2, window_height / 8)
+
+    titletext2 = titlefont.render(f"nb etoile2 :  {player2.etoile}", False, (0, 0, 0))
+    titletext_rect2 = titletext2.get_rect()
+    titletext_rect2.center = (window_width / 2, window_height / 6)
     draw_map(window, tmx_data)
     collision_tilesBatiment = get_collision_tiles(tmx_data, "batiments")
     collision_tilesPalmier = get_collision_tiles(tmx_data, "palmier")
@@ -405,12 +475,19 @@ def inGame():
 
     collision_tiles = collision_tilesBatiment + collision_tilesPalmier + collision_tilesBordure + collision_tilesMer
     previous_position = player.rect.copy()
+    previous_position_2 = player2.rect.copy()
     player.deplacer()
+    player2.deplacer()
     for tile in collision_tiles:
         if player.rect.colliderect(tile):
             player.rect = previous_position
+        elif player2.rect.colliderect(tile):
+            player2.rect = previous_position_2
     window.blit(player.image, player.rect)
+    window.blit(player2.image,player2.rect)
     window.blit(titletext,titletext_rect)
+    window.blit(titletext2,titletext_rect2)
+
     circleZone()
     take()
     statPole(player)

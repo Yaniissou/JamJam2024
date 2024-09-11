@@ -4,14 +4,17 @@ from objects import GameState
 from objects import Competences
 from objects.player import Player
 from objects.button import Button
+from objects.QTE import QTE
 from objects.Pays import Pays
 from objects.Structure import Structure
+
 pygame.init()
 window_width = 1024
 window_height = 768
 window = pygame.display.set_mode((window_width, window_height))
 clock = pygame.time.Clock()
 running = True
+minigame = False
 name = ""
 gamestate = GameState.GameState.IN_GAME
 

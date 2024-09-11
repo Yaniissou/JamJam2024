@@ -1,9 +1,9 @@
 import socket
-from _thread import *
+from _thread import start_new_thread
 
 # Paramètres du serveur
 serveur = "0.0.0.0"  # écoute sur toutes les interfaces réseau
-port = 1920
+port = 12345
 
 # Création du socket
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -18,23 +18,22 @@ s.listen(2)
 print("En attente de connexions, serveur démarré")
 
 # Liste pour stocker les données des joueurs (position, pseudo, pays)
-players_data = [{"pos": (100, 100), "pseudo": "", "country": None}, {"pos": (300, 300), "pseudo": "", "country": None}]
-
+players_data = [{"pos": (100, 100), "pseudo": "Joueur1", "country": "France"},
+                {"pos": (300, 300), "pseudo": "Joueur2", "country": "France"}]
 
 # Fonction pour lire une position
 def lire_position(chaine):
     chaine = chaine.split(",")
     return int(chaine[0]), int(chaine[1])
 
-
 # Fonction pour formater une position en chaîne
 def creer_position(tup):
-    return str(tup[0]) + "," + str(tup[1])
-
+    return f"{tup[0]},{tup[1]}"
 
 # Fonction qui gère chaque client sur un nouveau thread
 def client_thread(conn, joueur):
     conn.send(str.encode(creer_position(players_data[joueur]["pos"])))  # Envoi de la position initiale
+
     while True:
         try:
             data = conn.recv(2048).decode()
@@ -62,7 +61,6 @@ def client_thread(conn, joueur):
 
     print("Connexion perdue")
     conn.close()
-
 
 # Gestion des connexions des joueurs
 joueur_actuel = 0

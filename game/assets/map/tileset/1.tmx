@@ -7,7 +7,6 @@
   <grid orientation="orthogonal" width="32" height="32"/>
   <image source="basic_tileset_and_assets_standard/water_and_island_tiles_v2.png" width="480" height="256"/>
  </tileset>
- <tileset firstgid="129" source="assets_spritesheet_v2_free.tsx"/>
  <tileset firstgid="273" source="basic.tsx"/>
  <tileset firstgid="443" source="decorations.tsx"/>
  <tileset firstgid="446" source="beach_tiles.tsx"/>
@@ -27,8 +26,6 @@
  <tileset firstgid="2210" source="City_Transparent_gymnase.tsx"/>
  <tileset firstgid="2370" source="col.tsx"/>
  <tileset firstgid="2376" source="2D Soccer.tsx"/>
- <tileset firstgid="2601" source="../../../../../../cours/tiled/jamjam24/tileset/assets_spritesheet_v2_free.tsx"/>
- <tileset firstgid="2745" source="../../../../../../cours/tiled/jamjam24/tileset/water_and_island_tiles_v3.tsx"/>
  <layer id="8" name="ecole_cercle" width="32" height="24">
   <data encoding="csv">
 0,0,0,0,1671,1671,1671,1671,1671,1671,1671,1671,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

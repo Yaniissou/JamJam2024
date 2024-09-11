@@ -18,7 +18,7 @@ window = pygame.display.set_mode((window_width, window_height))
 clock = pygame.time.Clock()
 running = True
 name = ""
-gamestate = GameState.GameState.ENTRYPOINT
+gamestate = GameState.GameState.SELECTING_COUNTRY
 time_diff = pygame.time.get_ticks()
 minigame = False
 
@@ -26,6 +26,7 @@ titlefont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 72)
 littleTitlefont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 52)
 textFont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 48)
 parentheseFont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 24)
+statPoleFont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 12)
 
 GRIS = (229, 231, 230)
 ORANGE_PALE = (238, 230, 216)
@@ -92,7 +93,7 @@ imgPlayer = pygame.transform.scale(imgPlayer,(192,192))
 hopital = Structure("hopital",Competences.Competences.SANTE,100,None,False,0,False)
 ecole = Structure("ecole",Competences.Competences.EDUCATION,100,None,False,0,False)
 banque = Structure("banque",Competences.Competences.FINANCE,100,None,False,0,False)
-puit = Structure("puit",Competences.Competences.RESSOURCES_NATURELLES,100,None,False,0,False)
+puit = Structure("puit",Competences.Competences.RESSOURCES,100,None,False,0,False)
 stade = Structure("stade",Competences.Competences.SPORT,100,None,False,0,False)
 musee = Structure("musee",Competences.Competences.CULTURE,100,None,False,0,False)
 
@@ -290,6 +291,25 @@ def circleZone():
 
 
 
+def statPole(player1):
+    global competences
+    toolPole = pygame.Rect(330, 700, 300, 60)
+    pygame.draw.rect(window,MARRON_FONCE,toolPole)
+    pygame.draw.rect(window, (186, 88, 35), toolPole,5)
+    count =0
+    for cle in competences.keys():
+        if count <=2:
+            parentheseText = statPoleFont.render(f"{Competences.Competences(cle).name} : {competences[cle]}", False, (0, 0, 0))
+            parentheseText_rect = parentheseText.get_rect()
+            parentheseText_rect.center = (382 + count *90, 720)
+            window.blit(parentheseText,parentheseText_rect)
+        else:
+            parentheseText = statPoleFont.render(f"{Competences.Competences(cle).name} : {competences[cle]}", False, (0, 0, 0))
+            parentheseText_rect = parentheseText.get_rect()
+            parentheseText_rect.center = (370 + (count-3) * 90, 740)
+            window.blit(parentheseText, parentheseText_rect)
+        count += 1
+
 
 def checkItemCollisions(player, items):
     for item in items:
@@ -393,6 +413,7 @@ def inGame():
     window.blit(titletext,titletext_rect)
     circleZone()
     take()
+    statPole(player)
 
     for struc in strucGroupe:
         if struc.isCLaim and not inList(list_struc_complete,struc):
@@ -439,7 +460,7 @@ def resetGame():
     hopital = Structure("hopital", Competences.Competences.SANTE, 100, None, False, 0, False)
     ecole = Structure("ecole", Competences.Competences.EDUCATION, 100, None, False, 0, False)
     banque = Structure("banque", Competences.Competences.FINANCE, 100, None, False, 0, False)
-    puit = Structure("puit", Competences.Competences.RESSOURCES_NATURELLES, 100, None, False, 0, False)
+    puit = Structure("puit", Competences.Competences.RESSOURCES, 100, None, False, 0, False)
     stade = Structure("stade", Competences.Competences.SPORT, 100, None, False, 0, False)
     musee = Structure("musee", Competences.Competences.CULTURE, 100, None, False, 0, False)
     items = []
@@ -483,10 +504,10 @@ while running:
         pygame.mixer.music.load("assets/sound/zic intro.mp3")
         pygame.mixer.music.play(-1)
         music_started = True
-    if gamestate == GameState.GameState.IN_GAME and not music_started:
-        pygame.mixer.music.load("assets/sound/ingame song.mp3")
-        pygame.mixer.music.play(-1)
-        music_started = True
+    #if gamestate == GameState.GameState.IN_GAME and not music_started:
+     #   pygame.mixer.music.load("assets/sound/ingame song.mp3")
+      #  pygame.mixer.music.play(-1)
+       # music_started = True
     if gamestate == GameState.GameState.ENTRYPOINT:
         initMenu()
         if startButton.isClicked():

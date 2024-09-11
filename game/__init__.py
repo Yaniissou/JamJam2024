@@ -14,7 +14,8 @@ window = pygame.display.set_mode((window_width, window_height))
 clock = pygame.time.Clock()
 running = True
 name = ""
-gamestate = GameState.GameState.IN_GAME
+gamestate = GameState.GameState.ENTRYPOINT
+time_diff = pygame.time.get_ticks()
 
 titlefont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 72)
 textFont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 48)
@@ -38,29 +39,35 @@ creditButton.image = pygame.transform.scale(creditButton.image,(246,78))
 ruleBtn.image = pygame.transform.scale(ruleBtn.image,(246,78))
 nameButton.image = pygame.transform.scale(nameButton.image,(246,78))
 
-competences = {0 : 100,1 : 100,2 : 100,3 : 100,4 : 100,5 : 100}
+competences = {0 : 1.2,1 : 1.4,2 : 1,3 : 0.8,4 : 1,5 : 1}
 
-france = Pays("France",competences,pygame.image.load("assets/france.png"))
-allemagne = Pays("Allemagne",competences,pygame.image.load("assets/allemagne.png"))
-angleterre = Pays("Angleterre",competences,pygame.image.load("assets/uk.png"))
-chine = Pays("Chine",competences,pygame.image.load("assets/chine.png"))
-eu = Pays("Etat-unis",competences,pygame.image.load("assets/etats_unis.png"))
-russie = Pays("Russie",competences,pygame.image.load("assets/russie.png"))
+france = Pays("France",competences,pygame.image.load("assets/france.png"),None)
+allemagne = Pays("Allemagne",competences,pygame.image.load("assets/allemagne.png"),None)
+angleterre = Pays("Angleterre",competences,pygame.image.load("assets/uk.png"),None)
+chine = Pays("Chine",competences,pygame.image.load("assets/chine.png"),None)
+eu = Pays("Etat-unis",competences,pygame.image.load("assets/etats_unis.png"),None)
+russie = Pays("Russie",competences,pygame.image.load("assets/russie.png"),None)
 
+pays = [france,allemagne,angleterre,chine,eu,russie]
 selected_country = None
+selected_country_nation = None
 tmx_data = pytmx.util_pygame.load_pygame("assets/map/tileset/1.tmx")
 take_speed = 5
 col_active = False
 
-player = Player(125, 680,competences)
+
+player = Player(125, 680,competences,60,None)
 player.image = pygame.transform.scale(player.image, (32, 32))
 
-hopital = Structure("hopital",Competences.Competences.SANTE,300,None)
-ecole = Structure("ecole",Competences.Competences.EDUCATION,300,None)
-banque = Structure("banque",Competences.Competences.FINANCE,300,None)
-puit = Structure("puit",Competences.Competences.RESSOURCES_NATURELLES,300,None)
-stade = Structure("stade",Competences.Competences.SPORT,300,None)
-musee = Structure("musee",Competences.Competences.CULTURE,300,None)
+hopital = Structure("hopital",Competences.Competences.SANTE,100,None,False,0,False)
+ecole = Structure("ecole",Competences.Competences.EDUCATION,100,None,False,0,False)
+banque = Structure("banque",Competences.Competences.FINANCE,100,None,False,0,False)
+puit = Structure("puit",Competences.Competences.RESSOURCES_NATURELLES,100,None,False,0,False)
+stade = Structure("stade",Competences.Competences.SPORT,100,None,False,0,False)
+musee = Structure("musee",Competences.Competences.CULTURE,100,None,False,0,False)
+
+strucGroupe = [musee,hopital, ecole,stade,puit,banque]
+
 def draw_map(screen, tmx_data):
     tile_width = tmx_data.tilewidth
     tile_height = tmx_data.tileheight
@@ -170,29 +177,37 @@ def choosePseudo(name):
     window.blit(parentheseText,parentheseText_rect)
     nameButton.draw(window)
 
+
+
 def selectCountry():
     global selected_country
+    titletext = titlefont.render("Selectionnez un pays", False, (0, 0, 0))
+    titletext_rect = titletext.get_rect()
+    titletext_rect.center = (window_width / 2, window_height / 8)
     imgPlayer = pygame.image.load("assets/testPlayer.png")
     imgPlayer = pygame.transform.scale(imgPlayer,(256,256))
     frBtn = Button(window_width /6, window_height / 3,france.img)
+    france.btn = frBtn
     ukBtn = Button(window_width /2, window_height / 3,angleterre.img)
+    angleterre.btn = ukBtn
     euBtn = Button(window_width /1.25, window_height / 3,eu.img)
+    eu.btn = euBtn
     allemagneBtn = Button(window_width /6, window_height / 1.75,allemagne.img)
+    allemagne.btn = allemagneBtn
     chineBtn = Button(window_width /2, window_height / 1.75,chine.img)
+    chine.btn = chineBtn
     russieBtn = Button(window_width /1.25 , window_height / 1.75,russie.img)
-    btnPays = [frBtn,ukBtn,euBtn,allemagneBtn,chineBtn,russieBtn]
-    titletext = titlefont.render("Selectionner un pays", False, (0, 0, 0))
-    titletext_rect = titletext.get_rect()
-    titletext_rect.center = (window_width / 2, window_height / 8)
+    russie.btn = russieBtn
+
     window.fill(ORANGE_PALE)
 
     pygame.draw.rect(window,MARRON_FONCE,(window_width / 4, window_height / 1.1,256,32))
-    for btn in btnPays:
-        if btn.isHovered():
-            btn.image = pygame.transform.scale(btn.image,(235,160))
-        if btn.isClicked():
-            selected_country = btn
-        btn.draw(window)
+    for country in pays:
+        if country.btn.isHovered():
+            country.btn.image = pygame.transform.scale(country.btn.image,(235,160))
+        if country.btn.isClicked():
+            selected_country = country
+        country.btn.draw(window)
         if selected_country:
             countryBtnconfirm.draw(window)
             window.blit(imgPlayer,(window_width / 4, window_height / 1.6))
@@ -213,11 +228,22 @@ def circleZone():
         s.fill((50, 158, 168))
         window.blit(s,(tile.x,tile.y))
 
+
+
+
+def checkItemCollisions(player, items):
+    for item in items:
+        if player.rect.colliderect(item.rect):
+            player.etoile +=40
+            print("Collision detected!")
+            items.remove(item)
+
+
 def take():
     global take_speed
-    global col_active
+    global time_diff
+    global strucGroupe
     timer_event = pygame.USEREVENT + 1
-    charge_state = 0
     charge_speed = 0
     musee.coll_zone = get_collision_tiles(tmx_data, "culture_zone")
     hopital.coll_zone = get_collision_tiles(tmx_data, "hopital_zone")
@@ -226,35 +252,61 @@ def take():
     puit.coll_zone = get_collision_tiles(tmx_data, "puit_zone")
     banque.coll_zone = get_collision_tiles(tmx_data, "banque_zone")
     strucGroupe = [musee,hopital, ecole,stade,puit,banque]
+    pygame.draw.rect(window,GRIS,(150,300,100,20))
+    pygame.draw.rect(window,GRIS,(210,10,100,20))
+    pygame.draw.rect(window,GRIS,(450,10,100,20))
+    pygame.draw.rect(window,GRIS,(550,230,100,20))
+    pygame.draw.rect(window,GRIS,(850,50,100,20))
+    pygame.draw.rect(window,GRIS,(700,600,100,20))
+
+    pygame.draw.rect(window,(50, 158, 168),(150,300,musee.charge_state,20))
+    pygame.draw.rect(window,(50, 158, 168),(210,10,ecole.charge_state,20))
+    pygame.draw.rect(window,(50, 158, 168),(450,10,banque.charge_state,20))
+    pygame.draw.rect(window,(50, 158, 168),(550,230,stade.charge_state,20))
+    pygame.draw.rect(window,(50, 158, 168),(850,50,hopital.charge_state,20))
+    pygame.draw.rect(window,(50, 158, 168),(700,600,puit.charge_state,20))
     anyCol = False
     for structure in strucGroupe:
         for tile in structure.coll_zone:
-            charge_speed = player.competences[structure.competence.value] / take_speed
+            charge_tap = player.competences[structure.competence.value] * player.etoile
 
-            if player.rect.colliderect(tile):
+            if player.rect.colliderect(tile) and not structure.isCLaim:
                 anyCol = True
-                if not col_active:
-                    col_active = True
-                    pygame.time.set_timer(timer_event, 1000)
-                    print(f"Collision détectée : {col_active}")
+                if not structure.col_active:
+                    structure.col_active = True
+                else:
+                    previous_charge = structure.charge_state
+                    if structure.charge_state < structure.lifePole:
+                        structure.charge_state += charge_tap
+                        print(f"charge_state: {structure.charge_state}, lifePole: {structure.lifePole}")
 
-            if charge_state >= structure.lifePole and col_active:
-                print("Claim " + structure.nom)
-                col_active = False
-                pygame.time.set_timer(timer_event, 0)
-                charge_state = 0
+                    if structure.charge_state >= structure.lifePole and structure.col_active:
+                        structure.isCLaim = True
+                        structure.col_active = False
+                        diff = structure.lifePole - previous_charge
+                        player.etoile -= diff
+                        structure.charge_state = structure.lifePole
+                        print("Structure revendiquée")
+                    else:
+                        if player.etoile > 0:
+                            diff = structure.lifePole - structure.charge_state
+                            player.etoile = 0
+                        print(f"Étoiles restantes : {player.etoile}")
+            elif not player.rect.colliderect(tile) and not structure.isCLaim:
+                structure.col_active = False
 
-    if not anyCol and col_active:
-        col_active = False
-        pygame.time.set_timer(timer_event, 0)
-        print(f"Collision terminée : {col_active}")
 
-    if event.type == timer_event:
-        if col_active:
-            charge_state += charge_speed
-            print(charge_state)
+    if not anyCol and structure.col_active:
+        structure.col_active = False
+        print(f"Collision terminée : {structure.col_active}")
+
 
 def inGame():
+    player.country = selected_country
+    player.competences = player.country.competences
+    titletext = titlefont.render(f"nb etoile :  {player.etoile}", False, (0, 0, 0))
+    titletext_rect = titletext.get_rect()
+    titletext_rect.center = (window_width / 2, window_height / 8)
     draw_map(window, tmx_data)
     collision_tilesBatiment = get_collision_tiles(tmx_data, "batiments")
     collision_tilesPalmier = get_collision_tiles(tmx_data, "palmier")
@@ -264,11 +316,11 @@ def inGame():
     collision_tiles = collision_tilesBatiment + collision_tilesPalmier + collision_tilesBordure + collision_tilesMer
     previous_position = player.rect.copy()
     player.deplacer()
-
     for tile in collision_tiles:
         if player.rect.colliderect(tile):
             player.rect = previous_position
     window.blit(player.image, player.rect)
+    window.blit(titletext,titletext_rect)
     circleZone()
     take()
 while running:

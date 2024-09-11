@@ -2,14 +2,15 @@ import pygame
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y,competences):
+    def __init__(self, x, y,competences,etoile,country):
         super().__init__()
         self.image = pygame.image.load("assets/tile000.png")
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
         self.vitesse = 3
         self.competences = competences
-
+        self.etoile = etoile
+        self.country = country
     #more test
     def update(self):
         self.hitbox.center = self.rect.center

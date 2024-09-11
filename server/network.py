@@ -4,9 +4,9 @@ import socket
 class Network:
     def __init__(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.serveur = "192.168.41.219"  #  IP de serveur ETHERNET
-        self.port = 1929
-        self.adresse  = (self.serveur, self.port)
+        self.serveur = "localhost"
+        self.port = 1920
+        self.adresse = (self.serveur, self.port)
         self.position = self.connecter()
 
     # Fonction pour obtenir la position initiale
@@ -20,14 +20,18 @@ class Network:
             self.client.connect(self.adresse)
             print("Connexion réussie")
             return self.client.recv(2048).decode()
-        except Exception as e:
-            print(f"Erreur de connexion : {e}")
-            return None
+        except:
+            pass
 
     # Fonction pour envoyer et recevoir des données
-    def send(self, data):
+    def send_data(self, pos, pseudo, country):
         try:
+            # On envoie la position, le pseudo et le pays sous forme de chaîne
+            data = f"{pos[0]},{pos[1]};{pseudo};{country}"
             self.client.send(str.encode(data))
-            return self.client.recv(2048).decode()
+
+            # On reçoit la réponse du serveur (position, pseudo, pays de l'autre joueur)
+            retour = self.client.recv(2048).decode()
+            return retour.split(";")  # On sépare les données
         except socket.error as e:
-            print(f"Erreur d'envoi/réception : {e}")
+            print(e)

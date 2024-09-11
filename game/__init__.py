@@ -77,6 +77,8 @@ images_sprite_allemagne= [ pygame.image.load("./assets/sprite_allemagne/run_down
 
 
 player = Player(125, 680,competences,60,None,images_sprite_france)
+imgPlayer = france.imgPlayer
+imgPlayer = pygame.transform.scale(imgPlayer,(192,192))
 
 hopital = Structure("hopital",Competences.Competences.SANTE,100,None,False,0,False)
 ecole = Structure("ecole",Competences.Competences.EDUCATION,100,None,False,0,False)
@@ -200,11 +202,11 @@ def choosePseudo(name):
 
 def selectCountry():
     global selected_country
+    global imgPlayer
     titletext = titlefont.render("Selectionnez un pays", False, (0, 0, 0))
     titletext_rect = titletext.get_rect()
     titletext_rect.center = (window_width / 2, window_height / 8)
-    imgPlayer = france.imgPlayer
-    imgPlayer = pygame.transform.scale(imgPlayer,(192,192))
+
     frBtn = Button(window_width /6, window_height / 3,france.img)
     france.btn = frBtn
     ukBtn = Button(window_width /2, window_height / 3,angleterre.img)

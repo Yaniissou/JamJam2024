@@ -10,6 +10,8 @@ class QTE:
         print(self.timestamp)
         self.start()
 
+
+
     #fonction qui s'exécute à la fin du qte
     def start(self):
 
@@ -26,9 +28,8 @@ class QTE:
 
 
         # Si on atteint cet endroit, le temps est écoulé
-        print("Temps écoulé")
+        self.onEnd()
 
     def onEnd(self):
         print('fin!');
-
 

@@ -1,13 +1,16 @@
 import pygame
 import pytmx
+import random
+
+from game.objects.ClicGame import ClicGame
+from game.objects.mapItem import MapItem
 from objects import GameState
 from objects import Competences
 from objects.player import Player
 from objects.button import Button
+from objects.QTE import QTE
 from objects.Pays import Pays
 from objects.Structure import Structure
-import random
-
 from game.objects.mapItem import MapItem
 
 music_started = False
@@ -323,12 +326,15 @@ def take():
     global take_speed
     global time_diff
     global strucGroupe
+    timer_event = pygame.USEREVENT + 1
+    charge_speed = 0
     musee.coll_zone = get_collision_tiles(tmx_data, "culture_zone")
     hopital.coll_zone = get_collision_tiles(tmx_data, "hopital_zone")
     ecole.coll_zone = get_collision_tiles(tmx_data, "ecole_zone")
     stade.coll_zone = get_collision_tiles(tmx_data, "stade_zone")
     puit.coll_zone = get_collision_tiles(tmx_data, "puit_zone")
     banque.coll_zone = get_collision_tiles(tmx_data, "banque_zone")
+
     strucGroupe = [musee,hopital, ecole,stade,puit,banque]
     pygame.draw.rect(window,GRIS,(150,300,100,20))
     pygame.draw.rect(window,GRIS,(210,10,100,20))

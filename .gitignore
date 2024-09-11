@@ -1,5 +1,4 @@
 .idea/
 /game/objects/__pycache__
-/game/__pycache/
-/server/__pycache__
+/game/__pycache__/
 /server/__pycache__

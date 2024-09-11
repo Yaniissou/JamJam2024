@@ -7,6 +7,7 @@ from objects.button import Button
 from objects.Pays import Pays
 from objects.Structure import Structure
 
+music_started = False
 pygame.init()
 window_width = 1024
 window_height = 768
@@ -27,7 +28,7 @@ MARRON_FONCE = (147,68,26)
 
 ruleBtn = Button(260,680, pygame.image.load("assets/btn_regle_496.png"))
 startButton = Button(window_width / 1.6, window_height / 1.50, pygame.image.load("./assets/btn_start.png"))
-creditButton = Button(window_width / 1.6, window_height/1.1, pygame.image.load("./assets/credits.png"))
+creditButton = Button(1000,680, pygame.image.load("./assets/credits.png"))
 backButton = Button(300, 200, pygame.image.load("./assets/retour.png"))
 
 backButton.image = pygame.transform.scale(backButton.image,(150,106))
@@ -55,9 +56,17 @@ tmx_data = pytmx.util_pygame.load_pygame("assets/map/tileset/1.tmx")
 take_speed = 5
 col_active = False
 
+images_sprite_france = [ pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"),
+                         pygame.image.load("./assets/sprite_france/run_down_fr/sprite_1.png"),
+                         pygame.image.load("./assets/sprite_france/run_left_fr/sprite_0.png"),
+                         pygame.image.load("./assets/sprite_france/run_left_fr/sprite_1.png"),
+                         pygame.image.load("./assets/sprite_france/run_right_fr/sprite_0.png"),
+                         pygame.image.load("./assets/sprite_france/run_right_fr/sprite_1.png"),
+                         pygame.image.load("./assets/sprite_france/run_up_fr/sprite_0.png"),
+                         pygame.image.load("./assets/sprite_france/run_up_fr/sprite_1.png")]
 
-player = Player(125, 680,competences,60,None)
-player.image = pygame.transform.scale(player.image, (32, 32))
+
+player = Player(125, 680,competences,60,None,images_sprite_france)
 
 hopital = Structure("hopital",Competences.Competences.SANTE,100,None,False,0,False)
 ecole = Structure("ecole",Competences.Competences.EDUCATION,100,None,False,0,False)
@@ -93,13 +102,11 @@ def get_collision_tiles(tmx_data, layer_name):
     return collision_tiles
 def initMenu():
     background = pygame.image.load("./assets/menu-background.png")
-
-    titletext = titlefont.render("Concorde", False, (0, 0, 0))
-    titletext_rect = titletext.get_rect()
-    titletext_rect.center = (window_width/2, window_height/4)
+    imgTitre = pygame.image.load("./assets/imgTitre.png")
+    imgTitre = pygame.transform.scale(imgTitre,(500,93))
 
     window.blit(background, (0, 0))
-    window.blit(titletext, titletext_rect)
+    window.blit(imgTitre,(window_width/4,window_height/4))
     startButton.draw(window)
     creditButton.draw(window)
     ruleBtn.draw(window)
@@ -116,6 +123,8 @@ def initRule():
 
     window.blit(background, (0, 0))
     window.blit(titletext,titletext_rect)
+    backButton.draw(window)
+
     for line in lines:
         content = textFont.render(line, False, (0, 0, 0))
         window.blit(content, (window_width / 2 - content.get_width() / 2, y_offset))
@@ -131,7 +140,7 @@ def initCredits():
     sourcetitle_rect = sourcetitle.get_rect()
     sourcetitle_rect.center = (window_width, window_height)
 
-    devcontent = ("Yanis Harkati : Chef de projet|"
+    devcontent = ("Yanis Harkati : Developpeur|"
                        "Ilan Darmon : Developpeur|"
                        "Rachel Peretti : Developpeuse|"
                        "Idibei Hassan : Administrateur reseau|"
@@ -170,7 +179,7 @@ def choosePseudo(name):
     parentheseText = parentheseFont.render("(18 char max)", False, (0, 0, 0))
     parentheseText_rect = parentheseText.get_rect()
     parentheseText_rect.center = (window_width / 2, 365)
-    window.fill(ORANGE_PALE)
+    window.fill(MARRON_FONCE)
     pygame.draw.rect(window, (GRIS), (window_width / 4, window_height / 2, 512, 64))
     window.blit(titletext, titletext_rect)
     window.blit(pseudoUser, pseudoUser_rect)
@@ -199,7 +208,7 @@ def selectCountry():
     russieBtn = Button(window_width /1.25 , window_height / 1.75,russie.img)
     russie.btn = russieBtn
 
-    window.fill(ORANGE_PALE)
+    window.fill(MARRON_FONCE)
 
     pygame.draw.rect(window,MARRON_FONCE,(window_width / 4, window_height / 1.1,256,32))
     for country in pays:
@@ -335,6 +344,15 @@ while running:
                 elif len(name) <= 18 and event.unicode.isprintable():
                     name += event.unicode
 
+
+    if (gamestate == GameState.GameState.ENTRYPOINT or gamestate == GameState.GameState.CREDITS or gamestate == GameState.GameState.RULE) and not music_started:
+        pygame.mixer.music.load("assets/sound/zic intro.mp3")
+        pygame.mixer.music.play(-1)
+        music_started = True
+    if gamestate == GameState.GameState.IN_GAME and not music_started:
+        pygame.mixer.music.load("assets/sound/ingame song.mp3")
+        pygame.mixer.music.play(-1)
+        music_started = True
     if gamestate == GameState.GameState.ENTRYPOINT:
         initMenu()
         if startButton.isClicked():
@@ -350,7 +368,11 @@ while running:
 
     elif gamestate == GameState.GameState.RULE:
         initRule()
+        if backButton.isClicked():
+            gamestate = GameState.GameState.ENTRYPOINT
+
     elif gamestate == GameState.GameState.CHOOSE_PSEUDO:
+
         choosePseudo(name)
         if nameButton.isClicked() and name != "":
             gamestate = GameState.GameState.SELECTING_COUNTRY
@@ -359,6 +381,8 @@ while running:
         selectCountry()
         if countryBtnconfirm.isClicked():
             gamestate = GameState.GameState.IN_GAME
+            pygame.mixer.music.stop()
+            music_started = False
     elif gamestate == GameState.GameState.IN_GAME:
         inGame()
 

@@ -1,6 +1,7 @@
 .idea/
 .venv
 *.pyc
+/game/__pycache__
 /game/objects/__pycache__
 /game/__pycache__/*
 /server/__pycache__

@@ -42,12 +42,12 @@ nameButton.image = pygame.transform.scale(nameButton.image,(246,78))
 
 competences = {0 : 1.2,1 : 1.4,2 : 1,3 : 0.8,4 : 1,5 : 1}
 
-france = Pays("France",competences,pygame.image.load("assets/france.png"),None)
-allemagne = Pays("Allemagne",competences,pygame.image.load("assets/allemagne.png"),None)
-angleterre = Pays("Angleterre",competences,pygame.image.load("assets/uk.png"),None)
-chine = Pays("Chine",competences,pygame.image.load("assets/chine.png"),None)
-eu = Pays("Etat-unis",competences,pygame.image.load("assets/etats_unis.png"),None)
-russie = Pays("Russie",competences,pygame.image.load("assets/russie.png"),None)
+france = Pays("France",competences,pygame.image.load("assets/france.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
+allemagne = Pays("Allemagne",competences,pygame.image.load("assets/allemagne.png"),None,pygame.image.load("./assets/sprite_allemagne/run_down_all/sprite_0.png"))
+angleterre = Pays("Angleterre",competences,pygame.image.load("assets/uk.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
+chine = Pays("Chine",competences,pygame.image.load("assets/chine.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
+eu = Pays("Etat-unis",competences,pygame.image.load("assets/etats_unis.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
+russie = Pays("Russie",competences,pygame.image.load("assets/russie.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
 
 pays = [france,allemagne,angleterre,chine,eu,russie]
 selected_country = None
@@ -64,6 +64,16 @@ images_sprite_france = [ pygame.image.load("./assets/sprite_france/run_down_fr/s
                          pygame.image.load("./assets/sprite_france/run_right_fr/sprite_1.png"),
                          pygame.image.load("./assets/sprite_france/run_up_fr/sprite_0.png"),
                          pygame.image.load("./assets/sprite_france/run_up_fr/sprite_1.png")]
+
+
+images_sprite_allemagne= [ pygame.image.load("./assets/sprite_allemagne/run_down_all/sprite_0.png"),
+                         pygame.image.load("./assets/sprite_allemagne/run_down_all/sprite_1.png"),
+                         pygame.image.load("./assets/sprite_allemagne/run_left_all/sprite_0.png"),
+                         pygame.image.load("./assets/sprite_allemagne/run_left_all/sprite_1.png"),
+                         pygame.image.load("./assets/sprite_allemagne/run_right_all/sprite_0.png"),
+                         pygame.image.load("./assets/sprite_allemagne/run_right_all/sprite_1.png"),
+                         pygame.image.load("./assets/sprite_allemagne/run_up_all/sprite_0.png"),
+                         pygame.image.load("./assets/sprite_allemagne/run_up_all/sprite_1.png")]
 
 
 player = Player(125, 680,competences,60,None,images_sprite_france)
@@ -193,8 +203,8 @@ def selectCountry():
     titletext = titlefont.render("Selectionnez un pays", False, (0, 0, 0))
     titletext_rect = titletext.get_rect()
     titletext_rect.center = (window_width / 2, window_height / 8)
-    imgPlayer = pygame.image.load("assets/testPlayer.png")
-    imgPlayer = pygame.transform.scale(imgPlayer,(256,256))
+    imgPlayer = france.imgPlayer
+    imgPlayer = pygame.transform.scale(imgPlayer,(192,192))
     frBtn = Button(window_width /6, window_height / 3,france.img)
     france.btn = frBtn
     ukBtn = Button(window_width /2, window_height / 3,angleterre.img)
@@ -216,6 +226,8 @@ def selectCountry():
             country.btn.image = pygame.transform.scale(country.btn.image,(235,160))
         if country.btn.isClicked():
             selected_country = country
+            imgPlayer = selected_country.imgPlayer
+            imgPlayer = pygame.transform.scale(imgPlayer,(192,192))
         country.btn.draw(window)
         if selected_country:
             countryBtnconfirm.draw(window)
@@ -313,6 +325,9 @@ def take():
 def inGame():
     player.country = selected_country
     player.competences = player.country.competences
+    if player.country == allemagne:
+        player.images = images_sprite_allemagne
+
     titletext = titlefont.render(f"nb etoile :  {player.etoile}", False, (0, 0, 0))
     titletext_rect = titletext.get_rect()
     titletext_rect.center = (window_width / 2, window_height / 8)
@@ -357,10 +372,14 @@ while running:
         initMenu()
         if startButton.isClicked():
             gamestate = GameState.GameState.CHOOSE_PSEUDO
+            pygame.mixer.Sound("assets/sound/bnt sound.mp3").play()
+
         elif creditButton.isClicked():
             gamestate = GameState.GameState.CREDITS
+            pygame.mixer.Sound("assets/sound/bnt sound.mp3").play()
         elif ruleBtn.isClicked():
             gamestate = GameState.GameState.RULE
+            pygame.mixer.Sound("assets/sound/bnt sound.mp3").play()
     elif gamestate == GameState.GameState.CREDITS:
         initCredits()
         if backButton.isClicked() and gamestate == GameState.GameState.CREDITS:

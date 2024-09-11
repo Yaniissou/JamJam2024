@@ -1,9 +1,10 @@
 class Pays:
-    def __init__(self, nom, competences,img,btn):
+    def __init__(self, nom, competences,img,btn,imgPlayer):
         self.nom = nom #string
         self.competences = competences #dictionnaire
         self.img = img
         self.btn = btn
+        self.imgPlayer = imgPlayer
     #définit le multiplier pour une compétence
     def setMultiplier(self, competence, multiplier):
         #si la compétence existe

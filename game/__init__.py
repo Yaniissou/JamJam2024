@@ -1,6 +1,8 @@
 import pygame
 import pytmx
 import random
+
+from game.objects.mapItem import MapItem
 from objects import GameState
 from objects import Competences
 from objects.player import Player
@@ -202,6 +204,36 @@ def selectCountry():
             window.blit(imgPlayer,(window_width / 4, window_height / 1.6))
     window.blit(titletext, titletext_rect)
 
+def generate_items(length):
+    items = []
+
+    musee.coll_zone = get_collision_tiles(tmx_data, "culture_zone")
+    hopital.coll_zone = get_collision_tiles(tmx_data, "hopital_zone")
+    ecole.coll_zone = get_collision_tiles(tmx_data, "ecole_zone")
+    stade.coll_zone = get_collision_tiles(tmx_data, "stade_zone")
+    puit.coll_zone = get_collision_tiles(tmx_data, "puit_zone")
+    banque.coll_zone = get_collision_tiles(tmx_data, "banque_zone")
+    batiments = get_collision_tiles(tmx_data, "batiments")
+    palmier = get_collision_tiles(tmx_data, "palmier")
+    bordure = get_collision_tiles(tmx_data, "bordure")
+    mer = get_collision_tiles(tmx_data, "mer")
+    strucGroupe = [musee.coll_zone,hopital.coll_zone, ecole.coll_zone,stade.coll_zone,puit.coll_zone,banque.coll_zone, batiments, palmier, bordure, mer]
+
+    for k in range(length):
+        x = random.randint(0, window_width - 32)  # Limite de la fenêtre
+        y = random.randint(0, window_height - 32)
+        item = MapItem(x, y, pygame.image.load("./assets/testPlayer.png"))
+        for structure in strucGroupe:
+            for tile in structure:
+                while item.rect.colliderect(tile):
+                    x = random.randint(0, window_width - 32)  # Limite de la fenêtre
+                    y = random.randint(0, window_height - 32)
+                    item = MapItem(x, y, pygame.image.load("./assets/testPlayer.png"))
+
+
+        items.append(item)
+    return items
+
 def circleZone():
     collision_tiles_musee = get_collision_tiles(tmx_data,"culture_cercle")
     collision_tiles_hopital = get_collision_tiles(tmx_data,"hopital_cercle")
@@ -217,6 +249,14 @@ def circleZone():
         s.fill((50, 158, 168))
         window.blit(s,(tile.x,tile.y))
 
+
+
+def checkItemCollisions(player, items):
+    for item in items:
+        if player.rect.colliderect(item.rect):
+            print("Collision detected!")
+            items.remove(item)
+
 def take():
     global take_speed
     global col_active
@@ -229,6 +269,7 @@ def take():
     stade.coll_zone = get_collision_tiles(tmx_data, "stade_zone")
     puit.coll_zone = get_collision_tiles(tmx_data, "puit_zone")
     banque.coll_zone = get_collision_tiles(tmx_data, "banque_zone")
+
     strucGroupe = [musee,hopital, ecole,stade,puit,banque]
     anyCol = False
     for structure in strucGroupe:
@@ -258,6 +299,7 @@ def take():
             charge_state += charge_speed
             print(charge_state)
 
+items = generate_items(5)
 def inGame():
     draw_map(window, tmx_data)
     collision_tilesBatiment = get_collision_tiles(tmx_data, "batiments")
@@ -275,7 +317,13 @@ def inGame():
     window.blit(player.image, player.rect)
     circleZone()
     take()
+    for item in items:
+        item.draw(window)
+    checkItemCollisions(player, items)
 while running:
+    if gamestate == GameState.GameState.ENTRYPOINT:
+        initMenu()
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False

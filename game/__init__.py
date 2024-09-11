@@ -131,7 +131,7 @@ def initCredits():
     sourcetitle_rect = sourcetitle.get_rect()
     sourcetitle_rect.center = (window_width, window_height)
 
-    devcontent = ("Yanis Harkati : Developpeur|"
+    devcontent = ("Yanis Harkati : Chef de projet|"
                        "Ilan Darmon : Developpeur|"
                        "Rachel Peretti : Developpeuse|"
                        "Idibei Hassan : Administrateur reseau|"

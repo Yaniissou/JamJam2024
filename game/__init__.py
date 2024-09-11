@@ -6,6 +6,9 @@ from objects.player import Player
 from objects.button import Button
 from objects.Pays import Pays
 from objects.Structure import Structure
+import random
+
+from game.objects.mapItem import MapItem
 
 music_started = False
 pygame.init()
@@ -17,6 +20,7 @@ running = True
 name = ""
 gamestate = GameState.GameState.ENTRYPOINT
 time_diff = pygame.time.get_ticks()
+minigame = False
 
 titlefont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 72)
 textFont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 48)
@@ -198,7 +202,35 @@ def choosePseudo(name):
     window.blit(parentheseText,parentheseText_rect)
     nameButton.draw(window)
 
+def generate_items(length):
+    items = []
 
+    musee.coll_zone = get_collision_tiles(tmx_data, "culture_zone")
+    hopital.coll_zone = get_collision_tiles(tmx_data, "hopital_zone")
+    ecole.coll_zone = get_collision_tiles(tmx_data, "ecole_zone")
+    stade.coll_zone = get_collision_tiles(tmx_data, "stade_zone")
+    puit.coll_zone = get_collision_tiles(tmx_data, "puit_zone")
+    banque.coll_zone = get_collision_tiles(tmx_data, "banque_zone")
+    batiments = get_collision_tiles(tmx_data, "batiments")
+    palmier = get_collision_tiles(tmx_data, "palmier")
+    bordure = get_collision_tiles(tmx_data, "bordure")
+    mer = get_collision_tiles(tmx_data, "mer")
+    strucGroupe = [musee.coll_zone,hopital.coll_zone, ecole.coll_zone,stade.coll_zone,puit.coll_zone,banque.coll_zone, batiments, palmier, bordure, mer]
+
+    for k in range(length):
+        x = random.randint(0, window_width - 32)  # Limite de la fenêtre
+        y = random.randint(0, window_height - 32)
+        item = MapItem(x, y, pygame.image.load("./assets/testPlayer.png"))
+        for structure in strucGroupe:
+            for tile in structure:
+                while item.rect.colliderect(tile):
+                    x = random.randint(0, window_width - 32)  # Limite de la fenêtre
+                    y = random.randint(0, window_height - 32)
+                    item = MapItem(x, y, pygame.image.load("./assets/testPlayer.png"))
+
+
+        items.append(item)
+    return items
 
 def selectCountry():
     global selected_country
@@ -323,6 +355,7 @@ def take():
         structure.col_active = False
         print(f"Collision terminée : {structure.col_active}")
 
+items = generate_items(5)
 
 def inGame():
     player.country = selected_country
@@ -349,6 +382,9 @@ def inGame():
     window.blit(titletext,titletext_rect)
     circleZone()
     take()
+    for item in items:
+        item.draw(window)
+    checkItemCollisions(player, items)
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

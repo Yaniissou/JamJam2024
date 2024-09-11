@@ -1,4 +1,4 @@
-from threading import Timer
+import time
 import pygame
 
 class QTE:
@@ -6,31 +6,29 @@ class QTE:
         self.duree = duree #int
         self.action = action #event
         self.screen = screen #affichage du qte
-
+        self.timestamp = int(time.time())
+        print(self.timestamp)
+        self.start()
 
     #fonction qui s'exécute à la fin du qte
-    def exec(self):
-        #la clock (?)
-        clock = pygame.time.Clock()
-        #on affiche "fin" après que ça soit terminé
-        timer = Timer(self.duree, print("fin"))
-        #démarrer le timer du qte
-        timer.start()
+    def start(self):
 
-        #tant que le timer est actif
-        while timer.is_alive():
-            #on détecte les events
+
+        while time.time() <= (self.timestamp + self.duree):
+            print(time.time())
+            # on détecte les events
             for event in pygame.event.get():
-                #si l'event correspond à ce qu'on doit faire
+                # si l'event correspond à ce qu'on doit faire
                 if event.type == self.action:
-                    #on annule le qte
-                    timer.cancel()
+                    # on annule le qte
                     print("c'est bon!!!")
-
-        clock.tick(30)
-        #actualiser visuel
-        pygame.display.flip()
+                    return
 
 
+        # Si on atteint cet endroit, le temps est écoulé
+        print("Temps écoulé")
+
+    def onEnd(self):
+        print('fin!');
 
 

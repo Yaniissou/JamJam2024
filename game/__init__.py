@@ -108,17 +108,26 @@ stade = Structure("stade",Competences.Competences.SPORT,100,None,False,0,False)
 musee = Structure("musee",Competences.Competences.CULTURE,100,None,False,0,False)
 
 strucGroupe = [musee,hopital, ecole,stade,puit,banque]
-
+layer_mer2 = {"mer 2":False}
 def draw_map(screen, tmx_data):
+    global layer_mer2
     tile_width = tmx_data.tilewidth
     tile_height = tmx_data.tileheight
 
     for layer in tmx_data.visible_layers:
-        if isinstance(layer, pytmx.TiledTileLayer):
-            for x, y, gid in layer:
-                tile = tmx_data.get_tile_image_by_gid(gid)
-                if tile:
-                    screen.blit(tile, (x * tile_width, y * tile_height))
+        bad_layer = False
+        if layer.name == "mer 2" and not layer_mer2["mer 2"]:
+            bad_layer = True
+        if not bad_layer:
+            if isinstance(layer, pytmx.TiledTileLayer):
+                for x, y, gid in layer:
+                    tile = tmx_data.get_tile_image_by_gid(gid)
+                    if tile:
+                        screen.blit(tile, (x * tile_width, y * tile_height))
+    if layer_mer2["mer 2"]:
+        layer_mer2["mer 2"] = False
+    else:
+        layer_mer2["mer 2"] = True
 
 def get_collision_tiles(tmx_data, layer_name):
     collision_tiles = []

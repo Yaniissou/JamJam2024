@@ -12,17 +12,26 @@
         "": {
             "scaleInDock": 1
         },
+        "C:/Users/cours/tiled/jamjam24/tileset/assets_spritesheet_v2_free.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/cours/tiled/jamjam24/tileset/water_and_island_tiles_v3.tsx": {
+            "scaleInDock": 1
+        },
         "tileset/1.tmx": {
             "scale": 0.75,
-            "selectedLayer": 4,
+            "selectedLayer": 13,
             "viewCenter": {
-                "x": 492,
-                "y": 440
+                "x": 512,
+                "y": 194.66666666666663
             }
         },
         "tileset/1.tmx#water_and_island_tiles_v2": {
             "scaleInDock": 1,
             "scaleInEditor": 1
+        },
+        "tileset/2D Soccer.tsx": {
+            "scaleInDock": 1
         },
         "tileset/2house000042.tsx": {
             "scaleInDock": 0.125,

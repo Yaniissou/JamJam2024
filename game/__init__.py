@@ -114,8 +114,11 @@ images_sprite_russie = [ pygame.image.load("./assets/sprite_russie/run_down_ru/s
                          pygame.image.load("./assets/sprite_russie/run_up_ru/sprite_0.png"),
                          pygame.image.load("./assets/sprite_russie/run_up_ru/sprite_1.png")]
 
-images_qte = [pygame.image.load("./assets/image_qte_ressource/image_QTE_essence.png"),pygame.image.load("./assets/image_qte_ressource/image_QTE_essence-f2.png")]
-
+images_qte_ressource = [pygame.image.load("./assets/image_qte_ressource/image_QTE_essence.png"),pygame.image.load("./assets/image_qte_ressource/image_QTE_essence-f2.png")]
+image_qte_musee = [pygame.image.load("./assets/musee_qte.png")]
+image_qte_banque = [pygame.image.load("./assets/banque_qte.png")]
+ecole_qte = [pygame.image.load("./assets/ecole_qte.png")]
+stade_qte = [pygame.image.load("./assets/terrain_foot_qte.png")]
 player = Player(125, 680,competences_france,60,None,images_sprite_france,0)
 
 
@@ -131,6 +134,17 @@ musee = Structure("musee",Competences.Competences.CULTURE,100,None,False,0,False
 
 strucGroupe = [musee,hopital, ecole,stade,puit,banque]
 layer_mer2 = {"mer 2":False}
+
+addStar = False
+checked = False
+not_sel_qte = False
+qte_ressource = QTE(7000,False,images_qte_ressource)
+qte_culture = QTE(7000,False,image_qte_musee)
+qte_banque = QTE(7000,False,image_qte_banque)
+qte_ecole = QTE(7000,False,ecole_qte)
+qte_stade = QTE(7000,False,stade_qte)
+
+qtes= [qte_culture,qte_stade,qte_ecole,qte_banque,qte_ressource]
 def draw_map(screen, tmx_data):
     global layer_mer2
     tile_width = tmx_data.tilewidth
@@ -356,13 +370,20 @@ def statPole(player1):
             window.blit(parentheseText, parentheseText_rect)
         count += 1
 
-addStar = False
-checked = False
-qte_ressource = QTE(7000,False,images_qte)
+qte = qte_ressource
 def checkItemCollisions(player, items):
     global started
     global checked
+    global not_sel_qte
+    global qte
     timer_event = pygame.USEREVENT + 1
+
+
+    if not not_sel_qte:
+        for i in range(len(qtes)-1):
+            x = random.randint(0,len(qtes)-1)
+            qte = qtes[x]
+            not_sel_qte = True
 
     for item in items:
         if player.rect.colliderect(item.rect):
@@ -370,9 +391,10 @@ def checkItemCollisions(player, items):
             items.remove(item)
             pygame.time.set_timer(timer_event,qte_ressource.duree)
         if started:
-            qte_ressource.start(window_width, window_height, GRIS, window, textFont, player)
+            qte.start(window_width, window_height, GRIS, window, textFont, player)
         if event.type == timer_event:
-            qte_ressource.isFinish = True
+            qte.isFinish = True
+            not_sel_qte = False
             started = False
             pygame.time.set_timer(timer_event, 0)
 def take():

@@ -60,9 +60,9 @@ competences_chine = {0 : 1.5,1 : 0.8,2 : 1.4 ,3: 1.2,4 : 1.2 ,5: 1.2}
 france = Pays("France",competences_france,pygame.image.load("assets/france.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
 allemagne = Pays("Allemagne",competences_allemagne,pygame.image.load("assets/allemagne.png"),None,pygame.image.load("./assets/sprite_allemagne/run_down_all/sprite_0.png"))
 angleterre = Pays("Angleterre",competences_france,pygame.image.load("assets/uk.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
-chine = Pays("Chine",competences_chine,pygame.image.load("assets/chine.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
+chine = Pays("Chine",competences_chine,pygame.image.load("assets/chine.png"),None,pygame.image.load("./assets/sprite_chine/run_down_chine/sprite_0.png"))
 eu = Pays("Etat-unis",competences_france,pygame.image.load("assets/etats_unis.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
-russie = Pays("Russie",competences_france,pygame.image.load("assets/russie.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
+russie = Pays("Russie",competences_france,pygame.image.load("assets/russie.png"),None,pygame.image.load("./assets/sprite_russie/run_down_ru/sprite_0.png"))
 
 pays = [france,allemagne,angleterre,chine,eu,russie]
 selected_country = None
@@ -96,6 +96,23 @@ images_sprite_allemagne= [ pygame.image.load("./assets/sprite_allemagne/run_down
                          pygame.image.load("./assets/sprite_allemagne/run_up_all/sprite_0.png"),
                          pygame.image.load("./assets/sprite_allemagne/run_up_all/sprite_1.png")]
 
+images_sprite_chine= [ pygame.image.load("./assets/sprite_chine/run_down_chine/sprite_0.png"),
+                         pygame.image.load("./assets/sprite_chine/run_down_chine/sprite_1.png"),
+                         pygame.image.load("./assets/sprite_chine/run_left_chine/sprite_0.png"),
+                         pygame.image.load("./assets/sprite_chine/run_left_chine/sprite_1.png"),
+                         pygame.image.load("./assets/sprite_chine/run_right_chine/sprite_0.png"),
+                         pygame.image.load("./assets/sprite_chine/run_right_chine/sprite_1.png"),
+                         pygame.image.load("./assets/sprite_chine/run_up_chine/sprite_0.png"),
+                         pygame.image.load("./assets/sprite_chine/run_up_chine/sprite_1.png")]
+
+images_sprite_russie = [ pygame.image.load("./assets/sprite_russie/run_down_ru/sprite_0.png"),
+                         pygame.image.load("./assets/sprite_russie/run_down_ru/sprite_1.png"),
+                         pygame.image.load("./assets/sprite_russie/run_left_ru/sprite_0.png"),
+                         pygame.image.load("./assets/sprite_russie/run_left_ru/sprite_1.png"),
+                         pygame.image.load("./assets/sprite_russie/run_right_ru/sprite_0.png"),
+                         pygame.image.load("./assets/sprite_russie/run_right_ru/sprite_1.png"),
+                         pygame.image.load("./assets/sprite_russie/run_up_ru/sprite_0.png"),
+                         pygame.image.load("./assets/sprite_russie/run_up_ru/sprite_1.png")]
 
 images_qte = [pygame.image.load("./assets/image_qte_ressource/image_QTE_essence.png"),pygame.image.load("./assets/image_qte_ressource/image_QTE_essence-f2.png")]
 
@@ -453,7 +470,10 @@ def inGame():
     player.competences = player.country.competences
     if player.country == allemagne:
         player.images = images_sprite_allemagne
-
+    elif player.country == chine:
+        player.images = images_sprite_chine
+    elif player.country == russie:
+        player.images == images_sprite_russie
     draw_map(window, tmx_data)
     collision_tilesBatiment = get_collision_tiles(tmx_data, "batiments")
     collision_tilesPalmier = get_collision_tiles(tmx_data, "palmier")

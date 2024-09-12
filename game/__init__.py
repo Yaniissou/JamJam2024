@@ -203,7 +203,7 @@ def initCredits():
     devcontent = ("Yanis Harkati : Developpeur|"
                        "Ilan Darmon : Developpeur|"
                        "Rachel Peretti : Developpeuse|"
-                       "Idibei Hassan : Administrateur reseau|"
+                       "Idibei Hamid : Administrateur reseau|"
                        "Tom Jochum : Directeur artistique")
 
     devlines = devcontent.split('|')

@@ -4,6 +4,7 @@ GameJam2024 at IUT2 Grenoble
 Team members:
 - Ilan Darmon
 - Idibeï Hamid
+- Yanis Harkati
 - Tom Jochum
 - Rachel Peretti
 

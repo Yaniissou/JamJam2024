@@ -8,8 +8,8 @@ class QTE:
     def __init__(self, duree,isFinish):
         self.duree = duree #int
         self.isFinish = isFinish
-        self.maxuse = 5
-        keys = {
+        self.wons = 0
+        self.keys = {
             "a": pygame.K_a,
             "b": pygame.K_b,
             "c": pygame.K_c,
@@ -39,8 +39,9 @@ class QTE:
             "space": pygame.K_SPACE,
             "enter": pygame.K_RETURN,
         }
-        self.letter = random.choice(list(keys.keys()))
-        self.key = keys[self.letter]
+        self.updateLetter()
+        self.pressed = False
+
 
 
     def start(self,window_width,window_height,color,screen, font):
@@ -51,19 +52,13 @@ class QTE:
             letter = font.render(self.letter, False, (0,0,0))
             letter_rect = letter.get_rect(center=(window_width/2, window_height/2))
             screen.blit(letter, letter_rect)
-            pressed = False
             #print(pygame.key.get_pressed())
 
-            if pygame.key.get_pressed()[self.key] == True:
-                pressed = True
-
-
-
-            if not pressed:
-                return
-
-            print("on a checké la bonne key")
-            return
+            if pygame.key.get_pressed()[self.key] == True and not self.pressed:
+                print("on a checké la bonne key")
+                self.pressed = True
+                self.updateLetter()
+                self.wons += 1
 
         if self.isFinish:
             self.isFinish = False
@@ -72,3 +67,7 @@ class QTE:
     def onEnd(self):
         print('fin!');
 
+    def updateLetter(self):
+        self.letter = random.choice(list(self.keys.keys()))
+        self.key = self.keys[self.letter]
+        self.pressed = False

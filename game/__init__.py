@@ -313,9 +313,11 @@ def statPole(player1):
             window.blit(parentheseText, parentheseText_rect)
         count += 1
 
-qte_ressource = QTE(2000,False)
+qte_ressource = QTE(7000,False)
+addStar = False
 def checkItemCollisions(player, items):
     global started
+    global addStar
     timer_event = pygame.USEREVENT + 1
 
     for item in items:
@@ -328,6 +330,9 @@ def checkItemCollisions(player, items):
         if event.type == timer_event:
             qte_ressource.isFinish = True
             started = False
+            addStar = True
+            print(qte_ressource.wons)
+
 
 
 

@@ -8,7 +8,6 @@ class QTE:
     def __init__(self, duree,isFinish):
         self.duree = duree #int
         self.isFinish = isFinish
-        self.wons = 0
         self.keys = {
             "a": pygame.K_a,
             "b": pygame.K_b,
@@ -44,7 +43,7 @@ class QTE:
 
 
 
-    def start(self,window_width,window_height,color,screen, font):
+    def start(self,window_width,window_height,color,screen, font, player):
 
         if not self.isFinish:
             pygame.draw.rect(screen,color,(window_width/4, window_height/4,window_width/2, window_height/2))
@@ -58,7 +57,7 @@ class QTE:
                 print("on a checké la bonne key")
                 self.pressed = True
                 self.updateLetter()
-                self.wons += 1
+                player.etoile += 5
 
         if self.isFinish:
             self.isFinish = False

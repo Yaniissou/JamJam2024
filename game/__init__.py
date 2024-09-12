@@ -326,12 +326,12 @@ def checkItemCollisions(player, items):
             items.remove(item)
             pygame.time.set_timer(timer_event,qte_ressource.duree)
         if started:
-            qte_ressource.start(window_width, window_height, GRIS, window, textFont)
+            qte_ressource.start(window_width, window_height, GRIS, window, textFont, player)
         if event.type == timer_event:
             qte_ressource.isFinish = True
             started = False
             addStar = True
-            print(qte_ressource.wons)
+
 
 
 

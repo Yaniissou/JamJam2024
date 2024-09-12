@@ -7,3 +7,4 @@ class Competences(Enum):
     SPORT = 3
     CULTURE = 4
     RESSOURCES= 5
+

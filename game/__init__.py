@@ -53,14 +53,16 @@ ruleBtn.image = pygame.transform.scale(ruleBtn.image,(246,78))
 nameButton.image = pygame.transform.scale(nameButton.image,(246,78))
 replayBtn.image = pygame.transform.scale(replayBtn.image,(246,78))
 
-competences = {0 : 1.2,1 : 1.4,2 : 1,3 : 0.8,4 : 1,5 : 1}
+competences_france = {0 : 0.8 ,1 : 1.4,2 : 1, 3:1.2,4 : 1,5 : 1}
+competences_allemagne = {0 : 1.3,1 : 1,2 : 1, 3: 1,4 : 0.8, 5: 1}
+competences_chine = {0 : 1.5,1 : 0.8,2 : 1.4 ,3: 1.2,4 : 1.2 ,5: 1.2}
 
-france = Pays("France",competences,pygame.image.load("assets/france.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
-allemagne = Pays("Allemagne",competences,pygame.image.load("assets/allemagne.png"),None,pygame.image.load("./assets/sprite_allemagne/run_down_all/sprite_0.png"))
-angleterre = Pays("Angleterre",competences,pygame.image.load("assets/uk.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
-chine = Pays("Chine",competences,pygame.image.load("assets/chine.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
-eu = Pays("Etat-unis",competences,pygame.image.load("assets/etats_unis.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
-russie = Pays("Russie",competences,pygame.image.load("assets/russie.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
+france = Pays("France",competences_france,pygame.image.load("assets/france.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
+allemagne = Pays("Allemagne",competences_allemagne,pygame.image.load("assets/allemagne.png"),None,pygame.image.load("./assets/sprite_allemagne/run_down_all/sprite_0.png"))
+angleterre = Pays("Angleterre",competences_france,pygame.image.load("assets/uk.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
+chine = Pays("Chine",competences_chine,pygame.image.load("assets/chine.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
+eu = Pays("Etat-unis",competences_france,pygame.image.load("assets/etats_unis.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
+russie = Pays("Russie",competences_france,pygame.image.load("assets/russie.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
 
 pays = [france,allemagne,angleterre,chine,eu,russie]
 selected_country = None
@@ -96,7 +98,7 @@ images_sprite_allemagne= [ pygame.image.load("./assets/sprite_allemagne/run_down
 
 
 images_qte = [pygame.image.load("./assets/image_qte_ressource/image_QTE_essence.png"),pygame.image.load("./assets/image_qte_ressource/image_QTE_essence-f2.png")]
-player = Player(125, 680,competences,60,None,images_sprite_france,0)
+player = Player(125, 680,competences_france,60,None,images_sprite_france,0)
 imgPlayer = france.imgPlayer
 imgPlayer = pygame.transform.scale(imgPlayer,(192,192))
 
@@ -312,7 +314,7 @@ def circleZone():
 
 
 def statPole(player1):
-    global competences
+    global selected_country
     toolPole = pygame.Rect(330, 700, 400, 60)
     pygame.draw.rect(window,MARRON_FONCE,toolPole)
     pygame.draw.rect(window, (186, 88, 35), toolPole,5)
@@ -321,14 +323,14 @@ def statPole(player1):
     parentheseText_rect = parentheseText.get_rect()
     parentheseText_rect.center = (650, 720)
     window.blit(parentheseText,parentheseText_rect)
-    for cle in competences.keys():
+    for cle in selected_country.competences.keys():
         if count <=2:
-            parentheseText = statPoleFont.render(f"{Competences.Competences(cle).name} : {competences[cle]}", False, (0, 0, 0))
+            parentheseText = statPoleFont.render(f"{Competences.Competences(cle).name} : {selected_country.competences[cle]}", False, (0, 0, 0))
             parentheseText_rect = parentheseText.get_rect()
             parentheseText_rect.center = (382 + count *90, 720)
             window.blit(parentheseText,parentheseText_rect)
         else:
-            parentheseText = statPoleFont.render(f"{Competences.Competences(cle).name} : {competences[cle]}", False, (0, 0, 0))
+            parentheseText = statPoleFont.render(f"{Competences.Competences(cle).name} : {selected_country.competences[cle]}", False, (0, 0, 0))
             parentheseText_rect = parentheseText.get_rect()
             parentheseText_rect.center = (370 + (count-3) * 90, 740)
             window.blit(parentheseText, parentheseText_rect)
@@ -367,6 +369,7 @@ def take():
     banque.coll_zone = get_collision_tiles(tmx_data, "banque_zone")
 
     strucGroupe = [musee,hopital, ecole,stade,puit,banque]
+    #joueur 1
     pygame.draw.rect(window,GRIS,(150,300,100,20))
     pygame.draw.rect(window,GRIS,(210,10,100,20))
     pygame.draw.rect(window,GRIS,(450,10,100,20))
@@ -380,6 +383,22 @@ def take():
     pygame.draw.rect(window,(50, 158, 168),(550,230,stade.charge_state,20))
     pygame.draw.rect(window,(50, 158, 168),(850,50,hopital.charge_state,20))
     pygame.draw.rect(window,(50, 158, 168),(700,600,puit.charge_state,20))
+
+    #joeuur 2
+
+    pygame.draw.rect(window, GRIS, (150, 270, 100, 20))
+    pygame.draw.rect(window, GRIS, (210, 40, 100, 20))
+    pygame.draw.rect(window, GRIS, (450, 40, 100, 20))
+    pygame.draw.rect(window, GRIS, (550, 200, 100, 20))
+    pygame.draw.rect(window, GRIS, (850, 20, 100, 20))
+    pygame.draw.rect(window, GRIS, (700, 570, 100, 20))
+
+    pygame.draw.rect(window, (181, 61, 53), (150, 300, musee.charge_state, 20))
+    pygame.draw.rect(window, (181, 61, 53), (210, 10, ecole.charge_state, 20))
+    pygame.draw.rect(window, (181, 61, 53), (450, 10, banque.charge_state, 20))
+    pygame.draw.rect(window, (181, 61, 53), (550, 230, stade.charge_state, 20))
+    pygame.draw.rect(window, (181, 61, 53), (850, 50, hopital.charge_state, 20))
+    pygame.draw.rect(window, (181, 61, 53), (700, 600, puit.charge_state, 20))
     anyCol = False
     for structure in strucGroupe:
         for tile in structure.coll_zone:

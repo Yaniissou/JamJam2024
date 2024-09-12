@@ -27,6 +27,7 @@ littleTitlefont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 52)
 textFont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 48)
 parentheseFont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 24)
 statPoleFont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 12)
+starFont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 12)
 
 GRIS = (229, 231, 230)
 ORANGE_PALE = (238, 230, 216)
@@ -36,7 +37,7 @@ ruleBtn = Button(260,680, pygame.image.load("assets/btn_regle_496.png"))
 startButton = Button(window_width / 1.6, window_height / 1.50, pygame.image.load("./assets/btn_start.png"))
 creditButton = Button(1000,680, pygame.image.load("./assets/credits.png"))
 backButton = Button(300, 200, pygame.image.load("./assets/retour.png"))
-replayBtn = Button(630,530, pygame.image.load("assets/btn_regle_496.png"))
+replayBtn = Button(630,530, pygame.image.load("assets/btn_rejouer496.png"))
 
 backButton.image = pygame.transform.scale(backButton.image,(150,106))
 nameButton = Button(window_width / 1.6, window_height / 1.25, pygame.image.load("./assets/btn_valider.png"))
@@ -46,7 +47,7 @@ startButton.image = pygame.transform.scale(startButton.image,(246,78))
 creditButton.image = pygame.transform.scale(creditButton.image,(246,78))
 ruleBtn.image = pygame.transform.scale(ruleBtn.image,(246,78))
 nameButton.image = pygame.transform.scale(nameButton.image,(246,78))
-replayBtn.image = pygame.transform.scale(ruleBtn.image,(246,78))
+replayBtn.image = pygame.transform.scale(replayBtn.image,(246,78))
 
 competences = {0 : 1.2,1 : 1.4,2 : 1,3 : 0.8,4 : 1,5 : 1}
 
@@ -66,6 +67,10 @@ col_active = False
 count_struc_complete = 0
 list_struc_complete = []
 
+list_qte_obj = ["./assets/qte-object/bookv2.png",
+                "./assets/qte-object/fuel_tank.png",
+                "./assets/qte-object/raquette.png",
+                "./assets/qte-object/statue9.png"]
 images_sprite_france = [ pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"),
                          pygame.image.load("./assets/sprite_france/run_down_fr/sprite_1.png"),
                          pygame.image.load("./assets/sprite_france/run_left_fr/sprite_0.png"),
@@ -226,13 +231,15 @@ def generate_items(length):
     for k in range(length):
         x = random.randint(0, window_width - 32)  # Limite de la fenêtre
         y = random.randint(0, window_height - 32)
-        item = MapItem(x, y, pygame.image.load("./assets/testPlayer.png"))
+        index = random.randint(0,3)
+        item = MapItem(x, y, pygame.image.load(list_qte_obj[index]))
         for structure in strucGroupe:
             for tile in structure:
                 while item.rect.colliderect(tile):
                     x = random.randint(0, window_width - 32)  # Limite de la fenêtre
                     y = random.randint(0, window_height - 32)
-                    item = MapItem(x, y, pygame.image.load("./assets/testPlayer.png"))
+                    index = random.randint(0,3)
+                    item = MapItem(x, y, pygame.image.load(list_qte_obj[index]))
 
 
         items.append(item)
@@ -293,10 +300,14 @@ def circleZone():
 
 def statPole(player1):
     global competences
-    toolPole = pygame.Rect(330, 700, 300, 60)
+    toolPole = pygame.Rect(330, 700, 400, 60)
     pygame.draw.rect(window,MARRON_FONCE,toolPole)
     pygame.draw.rect(window, (186, 88, 35), toolPole,5)
     count =0
+    parentheseText = statPoleFont.render(f" Etoile : {player1.etoile} *", False, ORANGE_PALE)
+    parentheseText_rect = parentheseText.get_rect()
+    parentheseText_rect.center = (650, 720)
+    window.blit(parentheseText,parentheseText_rect)
     for cle in competences.keys():
         if count <=2:
             parentheseText = statPoleFont.render(f"{Competences.Competences(cle).name} : {competences[cle]}", False, (0, 0, 0))
@@ -394,9 +405,6 @@ def inGame():
     if player.country == allemagne:
         player.images = images_sprite_allemagne
 
-    titletext = titlefont.render(f"nb etoile :  {player.etoile}", False, (0, 0, 0))
-    titletext_rect = titletext.get_rect()
-    titletext_rect.center = (window_width / 2, window_height / 8)
     draw_map(window, tmx_data)
     collision_tilesBatiment = get_collision_tiles(tmx_data, "batiments")
     collision_tilesPalmier = get_collision_tiles(tmx_data, "palmier")
@@ -410,7 +418,6 @@ def inGame():
         if player.rect.colliderect(tile):
             player.rect = previous_position
     window.blit(player.image, player.rect)
-    window.blit(titletext,titletext_rect)
     circleZone()
     take()
     statPole(player)
@@ -472,7 +479,7 @@ def initWin():
     s = pygame.Surface((window_width/2, window_height/2))
     s.set_alpha(70)
     s.fill(GRIS)
-    titletext = littleTitlefont.render("Vous avez gagné", False, (0, 0, 0))
+    titletext = littleTitlefont.render("Vous avez gagne", False, (0, 0, 0))
     titletext_rect = titletext.get_rect()
     titletext_rect.center = (window_width / 2, window_height / 3)
     if replayBtn.isClicked():
@@ -504,10 +511,10 @@ while running:
         pygame.mixer.music.load("assets/sound/zic intro.mp3")
         pygame.mixer.music.play(-1)
         music_started = True
-    #if gamestate == GameState.GameState.IN_GAME and not music_started:
-     #   pygame.mixer.music.load("assets/sound/ingame song.mp3")
-      #  pygame.mixer.music.play(-1)
-       # music_started = True
+    if gamestate == GameState.GameState.IN_GAME and not music_started:
+        pygame.mixer.music.load("assets/sound/ingame song.mp3")
+        pygame.mixer.music.play(-1)
+        music_started = True
     if gamestate == GameState.GameState.ENTRYPOINT:
         initMenu()
         if startButton.isClicked():

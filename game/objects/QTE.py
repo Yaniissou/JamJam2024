@@ -19,7 +19,7 @@ class QTE:
 
 
         # Si on atteint cet endroit, le temps est écoulé
-        self.onEnd()
+
 
     def onEnd(self):
         print('fin!');

@@ -24,6 +24,7 @@ name = ""
 gamestate = GameState.GameState.SELECTING_COUNTRY
 time_diff = pygame.time.get_ticks()
 minigame = False
+started = False
 
 titlefont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 72)
 littleTitlefont = pygame.font.Font("./assets/fonts/RETROTECH.ttf", 52)
@@ -116,7 +117,6 @@ def draw_map(screen, tmx_data):
 def get_collision_tiles(tmx_data, layer_name):
     collision_tiles = []
     layer = tmx_data.get_layer_by_name(layer_name)
-
     if isinstance(layer, pytmx.TiledTileLayer):
         for x, y, gid in layer:
             if gid != 0:
@@ -313,13 +313,18 @@ def statPole(player1):
             window.blit(parentheseText, parentheseText_rect)
         count += 1
 
-
+qte_ressource = QTE(20000)
 def checkItemCollisions(player, items):
+    global started
     for item in items:
         if player.rect.colliderect(item.rect):
-            player.etoile +=40
-            print("Collision detected!")
+            started = True
             items.remove(item)
+        if started:
+            qte_ressource.start(window_width, window_height, GRIS, window)
+
+
+
 
 
 def take():

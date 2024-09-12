@@ -2,31 +2,14 @@ import time
 import pygame
 
 class QTE:
-    def __init__(self, duree, action, screen):
+    def __init__(self, duree):
         self.duree = duree #int
-        self.action = action #event
-        self.screen = screen #affichage du qte
-        self.timestamp = int(time.time())
-        print(self.timestamp)
-        self.start()
 
 
 
     #fonction qui s'exécute à la fin du qte
-    def start(self):
-
-
-        while time.time() <= (self.timestamp + self.duree):
-            print(time.time())
-            # on détecte les events
-            for event in pygame.event.get():
-                # si l'event correspond à ce qu'on doit faire
-                if event.type == self.action:
-                    # on annule le qte
-                    print("c'est bon!!!")
-                    return
-
-
+    def start(self,window_width,window_height,color,screen):
+        pygame.draw.rect(screen,color,(window_width/4, window_height/4,window_width/2, window_height/2))
         # Si on atteint cet endroit, le temps est écoulé
         self.onEnd()
 

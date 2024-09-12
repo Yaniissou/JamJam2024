@@ -54,6 +54,9 @@ class QTE:
             self.animer(window_width,window_height,screen)
             letter = font.render(self.letter, False, (0,0,0))
             letter_rect = letter.get_rect(center=(window_width/2, window_height/2))
+            toolPole = pygame.Rect(window_width/2 - 75, window_height/2 - 50, 150, 100)
+            pygame.draw.rect(screen,(148, 73, 35),toolPole)
+            pygame.draw.rect(screen, (186, 88, 35), toolPole,5)
             screen.blit(letter, letter_rect)
 
             if pygame.key.get_pressed()[self.key] == True and not self.pressed:

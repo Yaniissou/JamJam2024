@@ -6,4 +6,4 @@ class Competences(Enum):
     FINANCE = 2
     SPORT = 3
     CULTURE = 4
-    RESSOURCES_NATURELLES = 5
+    RESSOURCES= 5

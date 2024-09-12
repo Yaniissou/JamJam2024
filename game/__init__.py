@@ -313,15 +313,21 @@ def statPole(player1):
             window.blit(parentheseText, parentheseText_rect)
         count += 1
 
-qte_ressource = QTE(20000)
+qte_ressource = QTE(2000,False)
 def checkItemCollisions(player, items):
     global started
+    timer_event = pygame.USEREVENT + 1
+
     for item in items:
         if player.rect.colliderect(item.rect):
             started = True
             items.remove(item)
+            pygame.time.set_timer(timer_event,qte_ressource.duree)
         if started:
             qte_ressource.start(window_width, window_height, GRIS, window)
+        if event.type == timer_event:
+            qte_ressource.isFinish = True
+            started = False
 
 
 

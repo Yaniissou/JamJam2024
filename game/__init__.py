@@ -21,7 +21,7 @@ window = pygame.display.set_mode((window_width, window_height))
 clock = pygame.time.Clock()
 running = True
 name = ""
-gamestate = GameState.GameState.SELECTING_COUNTRY
+gamestate = GameState.GameState.ENTRYPOINT
 time_diff = pygame.time.get_ticks()
 minigame = False
 started = False
@@ -98,7 +98,10 @@ images_sprite_allemagne= [ pygame.image.load("./assets/sprite_allemagne/run_down
 
 
 images_qte = [pygame.image.load("./assets/image_qte_ressource/image_QTE_essence.png"),pygame.image.load("./assets/image_qte_ressource/image_QTE_essence-f2.png")]
+
 player = Player(125, 680,competences_france,60,None,images_sprite_france,0)
+
+
 imgPlayer = france.imgPlayer
 imgPlayer = pygame.transform.scale(imgPlayer,(192,192))
 
@@ -506,7 +509,7 @@ def resetGame():
     count_struc_complete = 0
     list_struc_complete = []
 
-    player = Player(125, 680, competences, 60, None, images_sprite_france, 0)
+    player = Player(125, 680, competences_france, 60, None, images_sprite_france, 0)
     imgPlayer = france.imgPlayer
     imgPlayer = pygame.transform.scale(imgPlayer, (192, 192))
 
@@ -525,7 +528,7 @@ def initWin():
     s = pygame.Surface((window_width/2, window_height/2))
     s.set_alpha(70)
     s.fill(GRIS)
-    titletext = littleTitlefont.render("Vous avez gagne", False, (0, 0, 0))
+    titletext = littleTitlefont.render("Vous gagnez la partie", False, (0, 0, 0))
     titletext_rect = titletext.get_rect()
     titletext_rect.center = (window_width / 2, window_height / 3)
     if replayBtn.isClicked():
@@ -540,6 +543,54 @@ def initWin():
     window.blit(s, (window_width/4, window_height/4))
     window.blit(titletext,titletext_rect)
     replayBtn.draw(window)
+
+def initLoss():
+    global gamestate
+    global music_started
+    s = pygame.Surface((window_width/2, window_height/2))
+    s.set_alpha(70)
+    s.fill(GRIS)
+    titletext = littleTitlefont.render("Vous perdez la partie", False, (0, 0, 0))
+    titletext_rect = titletext.get_rect()
+    titletext_rect.center = (window_width / 2, window_height / 3)
+    if replayBtn.isClicked():
+        gamestate = GameState.GameState.SELECTING_COUNTRY
+        resetGame()
+        pygame.mixer.music.stop()
+        if not music_started:
+            pygame.mixer.music.load("assets/sound/zic intro.mp3")
+            pygame.mixer.music.play(-1)
+            music_started = True
+    window.blit(s, (window_width/4, window_height/4))
+    window.blit(titletext,titletext_rect)
+    replayBtn.draw(window)
+
+def initDraw():
+    global gamestate
+    global music_started
+    s = pygame.Surface((window_width/2, window_height/2))
+    s.set_alpha(70)
+    s.fill(GRIS)
+    titletext = littleTitlefont.render("Personne ne gagne", False, (0, 0, 0))
+    titletext_rect = titletext.get_rect()
+    titletext_rect.center = (window_width / 2, window_height / 3)
+    if replayBtn.isClicked():
+        gamestate = GameState.GameState.SELECTING_COUNTRY
+        resetGame()
+        pygame.mixer.music.stop()
+        if not music_started:
+            pygame.mixer.music.load("assets/sound/zic intro.mp3")
+            pygame.mixer.music.play(-1)
+            music_started = True
+
+    window.blit(s, (window_width/4, window_height/4))
+    window.blit(titletext,titletext_rect)
+    replayBtn.draw(window)
+
+    window.blit(s, (window_width/4, window_height/4))
+    window.blit(titletext,titletext_rect)
+    replayBtn.draw(window)
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -598,7 +649,13 @@ while running:
     elif gamestate == GameState.GameState.IN_GAME:
         inGame()
     elif gamestate == GameState.GameState.WIN:
-        initWin()
+        if player.countClaim > 1:
+            initDraw()
+        elif player.countClaim == 1:
+            initWin()
+        else:
+            initLoss()
+
 
 
     pygame.display.update()

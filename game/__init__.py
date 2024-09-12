@@ -90,6 +90,7 @@ images_sprite_allemagne= [ pygame.image.load("./assets/sprite_allemagne/run_down
                          pygame.image.load("./assets/sprite_allemagne/run_up_all/sprite_1.png")]
 
 
+images_qte = [pygame.image.load("./assets/image_qte_ressource/image_QTE_essence.png"),pygame.image.load("./assets/image_qte_ressource/image_QTE_essence-f2.png")]
 player = Player(125, 680,competences,60,None,images_sprite_france,0)
 imgPlayer = france.imgPlayer
 imgPlayer = pygame.transform.scale(imgPlayer,(192,192))
@@ -123,7 +124,7 @@ def get_collision_tiles(tmx_data, layer_name):
                 collision_tiles.append(pygame.Rect(x * tmx_data.tilewidth,
                                                    y * tmx_data.tileheight,
                                                    tmx_data.tilewidth,
-                                                   tmx_data.tileheight))
+                             tmx_data.tileheight))
     return collision_tiles
 def initMenu():
     background = pygame.image.load("./assets/menu-background.png")
@@ -313,11 +314,12 @@ def statPole(player1):
             window.blit(parentheseText, parentheseText_rect)
         count += 1
 
-qte_ressource = QTE(7000,False)
 addStar = False
+checked = False
+qte_ressource = QTE(7000,False,images_qte)
 def checkItemCollisions(player, items):
     global started
-    global addStar
+    global checked
     timer_event = pygame.USEREVENT + 1
 
     for item in items:
@@ -330,14 +332,7 @@ def checkItemCollisions(player, items):
         if event.type == timer_event:
             qte_ressource.isFinish = True
             started = False
-            addStar = True
-
-
-
-
-
-
-
+            pygame.time.set_timer(timer_event, 0)
 def take():
     global take_speed
     global time_diff
@@ -411,6 +406,7 @@ def inGame():
     global count_struc_complete
     global gamestate
     global list_struc_complete
+    global checked
     player.country = selected_country
     player.competences = player.country.competences
     if player.country == allemagne:

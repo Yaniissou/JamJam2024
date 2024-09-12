@@ -5,7 +5,7 @@ import pygame
 
 
 class QTE:
-    def __init__(self, duree,isFinish):
+    def __init__(self, duree,isFinish,images):
         self.duree = duree #int
         self.isFinish = isFinish
         self.keys = {
@@ -42,22 +42,26 @@ class QTE:
         self.pressed = False
 
 
+        self.image_index = 0
+        self.images = images
+        self.image = self.images[self.image_index]
+        self.animation_speed = 2
+        self.animation_counter = 0
 
     def start(self,window_width,window_height,color,screen, font, player):
 
         if not self.isFinish:
-            pygame.draw.rect(screen,color,(window_width/4, window_height/4,window_width/2, window_height/2))
-
+            self.animer(window_width,window_height,screen)
             letter = font.render(self.letter, False, (0,0,0))
             letter_rect = letter.get_rect(center=(window_width/2, window_height/2))
             screen.blit(letter, letter_rect)
-            #print(pygame.key.get_pressed())
 
             if pygame.key.get_pressed()[self.key] == True and not self.pressed:
                 print("on a checké la bonne key")
                 self.pressed = True
                 self.updateLetter()
                 player.etoile += 5
+
 
         if self.isFinish:
             self.isFinish = False
@@ -70,3 +74,14 @@ class QTE:
         self.letter = random.choice(list(self.keys.keys()))
         self.key = self.keys[self.letter]
         self.pressed = False
+    def animer(self,window_width,window_height,screen):
+
+        self.animation_speed = 8
+        self.animation_counter += 1
+        if self.animation_counter >= self.animation_speed:
+            self.image_index = (self.image_index + 1) % len(self.images)
+            self.image = self.images[self.image_index]
+            self.animation_counter = 0
+        self.image = pygame.transform.scale(self.image,(window_width/2, window_height/2))
+        screen.blit(self.image, ((window_width - self.image.get_width()) // 2, (window_height - self.image.get_height()) // 2))
+

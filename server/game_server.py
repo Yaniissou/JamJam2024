@@ -9,7 +9,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 #adresse + port pour se connecter au serveur
 serveur = "0.0.0.0"  # écoute sur toutes les interfaces réseau
-port = 5555
+port = 1234
 
 #créer le socket
 #une connection INET et de type STREAMing

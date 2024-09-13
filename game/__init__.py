@@ -783,12 +783,12 @@ while running:
     elif gamestate == GameState.GameState.IN_GAME:
         inGame()
     elif gamestate == GameState.GameState.WIN:
-        if player.countClaim > 1:
-            initDraw()
-        elif player.countClaim == 1:
+        if player.countClaim >= 6:
+            initWin()
+        elif player.countClaim <6 :
             initLoss()
         else:
-            initWin()
+            initDraw()
 
 
 

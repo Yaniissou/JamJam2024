@@ -5,7 +5,7 @@ class Network:
     def __init__(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.serveur = "192.168.41.225"  #changer l'ip comme étant celle de la machine actuelle
-        self.port = 5555
+        self.port = 1234
         self.adresse = (self.serveur, self.port)
         self.position = self.connecter()
 

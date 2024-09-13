@@ -1,12 +1,11 @@
 import socket
 from _thread import start_new_thread
-import pickle
 import sys
 import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from game.objects.Structure import Structure
+#from game.objects.Structure import Structure
 
 #adresse + port pour se connecter au serveur
 serveur = "0.0.0.0"  # écoute sur toutes les interfaces réseau
@@ -30,8 +29,8 @@ players_data = [{"pos": (100, 100), "pseudo": "Joueur1", "country": "France"},
                 {"pos": (100, 100), "pseudo": "Joueur2", "country": "Allemagne"}]
 
 #test pour envoyer des objets: utiliser Pickle
-baseStructure = Structure("nom", None, 0, None, False, 0, False)
-buildings_data = pickle.dumps(baseStructure)
+#baseStructure = Structure("nom", None, 0, None, False, 0, False)
+#buildings_data = pickle.dumps(baseStructure)
 
 #lire une position
 def lire_position(chaine):
@@ -79,7 +78,7 @@ def client_thread(conn, joueur):
 joueur_actuel = 0
 while True:
     conn, addr = s.accept()
-    print("Connecté à :", addr)
+    print("actuellement connecté à :", addr)
 
     #pour chaque joueur, un thread
     start_new_thread(client_thread, (conn, joueur_actuel))

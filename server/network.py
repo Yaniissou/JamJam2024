@@ -1,12 +1,11 @@
 import socket
-from ssl import socket_error
 
 
 class Network:
     def __init__(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.serveur = "192.168.41.225"  # Remplace par l'adresse IP de l'hôte du serveur
-        self.port = 12345
+        self.serveur = "192.168.41.225"  #changer l'ip comme étant celle de la machine actuelle
+        self.port = 5555
         self.adresse = (self.serveur, self.port)
         self.position = self.connecter()
 
@@ -15,9 +14,9 @@ class Network:
 
     def connecter(self):
         try:
-            print(f"Tentative de connexion au serveur à {self.adresse}")
+            print("connexion à " + str(self.adresse))
             self.client.connect(self.adresse)
-            print("Connexion réussie")
+            print("connexion réussie!!!")
             return self.client.recv(1024).decode()
         except:
             pass
@@ -45,5 +44,5 @@ class Network:
 
             result = self.client.recv(1024).decode()
             return result.split(";")
-        except socket_error as e:
-            print(e)
+        except:
+            pass

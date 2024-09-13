@@ -7,13 +7,13 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from game.objects.ClicGame import ClicGame
 from game.objects.mapItem import MapItem
-from objects import GameState
-from objects import Competences
-from objects.player import Player
-from objects.button import Button
-from objects.QTE import QTE
-from objects.Pays import Pays
-from objects.Structure import Structure
+from game.objects import GameState
+from game.objects import Competences
+from game.objects.player import Player
+from game.objects.button import Button
+from game.objects.QTE import QTE
+from game.objects.Pays import Pays
+from game.objects.Structure import Structure
 import random
 
 from game.objects.mapItem import MapItem
@@ -131,7 +131,7 @@ player = Player(125, 680,competences_france,60,None,images_sprite_france,0)
 imgPlayer = france.imgPlayer
 imgPlayer = pygame.transform.scale(imgPlayer,(192,192))
 
-player2 = Player(125, 680,competences,60,None,images_sprite_allemagne,0)
+player2 = Player(125, 680,competences_allemagne,60,None,images_sprite_allemagne,0)
 imgPlayer2 = allemagne.imgPlayer
 imgPlayer = pygame.transform.scale(imgPlayer,(192,192))
 
@@ -163,8 +163,6 @@ def redraw(window, player, player2):
     window.blit(player2.image, player2.rect)
     #et on update le tout
     pygame.display.update()
-
-
 addStar = False
 checked = False
 not_sel_qte = False
@@ -561,6 +559,11 @@ def inGame():
     take()
     statPole(player)
 
+
+    for item in items:
+        item.draw(window)
+    checkItemCollisions(player, items)
+
     try:
         data_player2 = network.sendPlayerData((player.rect.x, player.rect.y), 'pseudo', 'France')
         pos_player2 = lire_position(data_player2[0])
@@ -588,10 +591,6 @@ def inGame():
 
     if count_struc_complete == 6:
         gamestate = GameState.GameState.WIN
-
-    for item in items:
-        item.draw(window)
-    checkItemCollisions(player, items)
 
 def resetGame():
     global music_started
@@ -756,9 +755,9 @@ while running:
         if player.countClaim > 1:
             initDraw()
         elif player.countClaim == 1:
-            initWin()
-        else:
             initLoss()
+        else:
+            initWin()
 
 
 

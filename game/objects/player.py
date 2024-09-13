@@ -15,6 +15,7 @@ class Player(pygame.sprite.Sprite):
         self.country = country
         self.animation_speed = 2
         self.animation_counter = 0
+        self.countClaim = countClaim
     #more test
     def update(self):
         self.hitbox.center = self.rect.center

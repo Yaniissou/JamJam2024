@@ -27,7 +27,7 @@ window = pygame.display.set_mode((window_width, window_height))
 clock = pygame.time.Clock()
 running = True
 name = ""
-gamestate = GameState.GameState.SELECTING_COUNTRY
+gamestate = GameState.GameState.ENTRYPOINT
 time_diff = pygame.time.get_ticks()
 minigame = False
 started = False
@@ -59,14 +59,16 @@ ruleBtn.image = pygame.transform.scale(ruleBtn.image,(246,78))
 nameButton.image = pygame.transform.scale(nameButton.image,(246,78))
 replayBtn.image = pygame.transform.scale(replayBtn.image,(246,78))
 
-competences = {0 : 1.2,1 : 1.4,2 : 1,3 : 0.8,4 : 1,5 : 1}
+competences_france = {0 : 0.8 ,1 : 1.4,2 : 1, 3:1.2,4 : 1,5 : 1}
+competences_allemagne = {0 : 1.3,1 : 1,2 : 1, 3: 1,4 : 0.8, 5: 1}
+competences_chine = {0 : 1.5,1 : 0.8,2 : 1.4 ,3: 1.2,4 : 1.2 ,5: 1.2}
 
-france = Pays("France",competences,pygame.image.load("assets/france.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
-allemagne = Pays("Allemagne",competences,pygame.image.load("assets/allemagne.png"),None,pygame.image.load("./assets/sprite_allemagne/run_down_all/sprite_0.png"))
-angleterre = Pays("Angleterre",competences,pygame.image.load("assets/uk.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
-chine = Pays("Chine",competences,pygame.image.load("assets/chine.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
-eu = Pays("Etat-unis",competences,pygame.image.load("assets/etats_unis.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
-russie = Pays("Russie",competences,pygame.image.load("assets/russie.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
+france = Pays("France",competences_france,pygame.image.load("assets/france.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
+allemagne = Pays("Allemagne",competences_allemagne,pygame.image.load("assets/allemagne.png"),None,pygame.image.load("./assets/sprite_allemagne/run_down_all/sprite_0.png"))
+angleterre = Pays("Angleterre",competences_france,pygame.image.load("assets/uk.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
+chine = Pays("Chine",competences_chine,pygame.image.load("assets/chine.png"),None,pygame.image.load("./assets/sprite_chine/run_down_chine/sprite_0.png"))
+eu = Pays("Etat-unis",competences_france,pygame.image.load("assets/etats_unis.png"),None,pygame.image.load("./assets/sprite_france/run_down_fr/sprite_0.png"))
+russie = Pays("Russie",competences_france,pygame.image.load("assets/russie.png"),None,pygame.image.load("./assets/sprite_russie/run_down_ru/sprite_0.png"))
 
 pays = [france,allemagne,angleterre,chine,eu,russie]
 selected_country = None
@@ -100,10 +102,32 @@ images_sprite_allemagne= [ pygame.image.load("./assets/sprite_allemagne/run_down
                          pygame.image.load("./assets/sprite_allemagne/run_up_all/sprite_0.png"),
                          pygame.image.load("./assets/sprite_allemagne/run_up_all/sprite_1.png")]
 
+images_sprite_chine= [ pygame.image.load("./assets/sprite_chine/run_down_chine/sprite_0.png"),
+                         pygame.image.load("./assets/sprite_chine/run_down_chine/sprite_1.png"),
+                         pygame.image.load("./assets/sprite_chine/run_left_chine/sprite_0.png"),
+                         pygame.image.load("./assets/sprite_chine/run_left_chine/sprite_1.png"),
+                         pygame.image.load("./assets/sprite_chine/run_right_chine/sprite_0.png"),
+                         pygame.image.load("./assets/sprite_chine/run_right_chine/sprite_1.png"),
+                         pygame.image.load("./assets/sprite_chine/run_up_chine/sprite_0.png"),
+                         pygame.image.load("./assets/sprite_chine/run_up_chine/sprite_1.png")]
 
-images_qte = [pygame.image.load("./assets/image_qte_ressource/image_QTE_essence.png"),pygame.image.load("./assets/image_qte_ressource/image_QTE_essence-f2.png")]
-#définir les joueurs
-player = Player(125, 680,competences,60,None,images_sprite_france,0)
+images_sprite_russie = [ pygame.image.load("./assets/sprite_russie/run_down_ru/sprite_0.png"),
+                         pygame.image.load("./assets/sprite_russie/run_down_ru/sprite_1.png"),
+                         pygame.image.load("./assets/sprite_russie/run_left_ru/sprite_0.png"),
+                         pygame.image.load("./assets/sprite_russie/run_left_ru/sprite_1.png"),
+                         pygame.image.load("./assets/sprite_russie/run_right_ru/sprite_0.png"),
+                         pygame.image.load("./assets/sprite_russie/run_right_ru/sprite_1.png"),
+                         pygame.image.load("./assets/sprite_russie/run_up_ru/sprite_0.png"),
+                         pygame.image.load("./assets/sprite_russie/run_up_ru/sprite_1.png")]
+
+images_qte_ressource = [pygame.image.load("./assets/image_qte_ressource/image_QTE_essence.png"),pygame.image.load("./assets/image_qte_ressource/image_QTE_essence-f2.png")]
+image_qte_musee = [pygame.image.load("./assets/musee_qte.png")]
+image_qte_banque = [pygame.image.load("./assets/banque_qte.png")]
+ecole_qte = [pygame.image.load("./assets/ecole_qte.png")]
+stade_qte = [pygame.image.load("./assets/terrain_foot_qte.png")]
+player = Player(125, 680,competences_france,60,None,images_sprite_france,0)
+
+
 imgPlayer = france.imgPlayer
 imgPlayer = pygame.transform.scale(imgPlayer,(192,192))
 
@@ -119,6 +143,8 @@ stade = Structure("stade",Competences.Competences.SPORT,100,None,False,0,False)
 musee = Structure("musee",Competences.Competences.CULTURE,100,None,False,0,False)
 
 strucGroupe = [musee,hopital, ecole,stade,puit,banque]
+layer_mer2 = {"mer 2":False}
+
 
 #prendre une chaine de caractères et en déduire une position
 def lire_position(chaine):
@@ -138,16 +164,36 @@ def redraw(window, player, player2):
     #et on update le tout
     pygame.display.update()
 
+
+addStar = False
+checked = False
+not_sel_qte = False
+qte_ressource = QTE(7000,False,images_qte_ressource)
+qte_culture = QTE(7000,False,image_qte_musee)
+qte_banque = QTE(7000,False,image_qte_banque)
+qte_ecole = QTE(7000,False,ecole_qte)
+qte_stade = QTE(7000,False,stade_qte)
+
+qtes= [qte_culture,qte_stade,qte_ecole,qte_banque,qte_ressource]
 def draw_map(screen, tmx_data):
+    global layer_mer2
     tile_width = tmx_data.tilewidth
     tile_height = tmx_data.tileheight
 
     for layer in tmx_data.visible_layers:
-        if isinstance(layer, pytmx.TiledTileLayer):
-            for x, y, gid in layer:
-                tile = tmx_data.get_tile_image_by_gid(gid)
-                if tile:
-                    screen.blit(tile, (x * tile_width, y * tile_height))
+        bad_layer = False
+        if layer.name == "mer 2" and not layer_mer2["mer 2"]:
+            bad_layer = True
+        if not bad_layer:
+            if isinstance(layer, pytmx.TiledTileLayer):
+                for x, y, gid in layer:
+                    tile = tmx_data.get_tile_image_by_gid(gid)
+                    if tile:
+                        screen.blit(tile, (x * tile_width, y * tile_height))
+    if layer_mer2["mer 2"]:
+        layer_mer2["mer 2"] = False
+    else:
+        layer_mer2["mer 2"] = True
 
 def get_collision_tiles(tmx_data, layer_name):
     collision_tiles = []
@@ -332,7 +378,7 @@ def circleZone():
 
 
 def statPole(player1):
-    global competences
+    global selected_country
     toolPole = pygame.Rect(330, 700, 400, 60)
     pygame.draw.rect(window,MARRON_FONCE,toolPole)
     pygame.draw.rect(window, (186, 88, 35), toolPole,5)
@@ -341,26 +387,33 @@ def statPole(player1):
     parentheseText_rect = parentheseText.get_rect()
     parentheseText_rect.center = (650, 720)
     window.blit(parentheseText,parentheseText_rect)
-    for cle in competences.keys():
+    for cle in selected_country.competences.keys():
         if count <=2:
-            parentheseText = statPoleFont.render(f"{Competences.Competences(cle).name} : {competences[cle]}", False, (0, 0, 0))
+            parentheseText = statPoleFont.render(f"{Competences.Competences(cle).name} : {selected_country.competences[cle]}", False, (0, 0, 0))
             parentheseText_rect = parentheseText.get_rect()
             parentheseText_rect.center = (382 + count *90, 720)
             window.blit(parentheseText,parentheseText_rect)
         else:
-            parentheseText = statPoleFont.render(f"{Competences.Competences(cle).name} : {competences[cle]}", False, (0, 0, 0))
+            parentheseText = statPoleFont.render(f"{Competences.Competences(cle).name} : {selected_country.competences[cle]}", False, (0, 0, 0))
             parentheseText_rect = parentheseText.get_rect()
             parentheseText_rect.center = (370 + (count-3) * 90, 740)
             window.blit(parentheseText, parentheseText_rect)
         count += 1
 
-addStar = False
-checked = False
-qte_ressource = QTE(7000,False,images_qte)
+qte = qte_ressource
 def checkItemCollisions(player, items):
     global started
     global checked
+    global not_sel_qte
+    global qte
     timer_event = pygame.USEREVENT + 1
+
+
+    if not not_sel_qte:
+        for i in range(len(qtes)-1):
+            x = random.randint(0,len(qtes)-1)
+            qte = qtes[x]
+            not_sel_qte = True
 
     for item in items:
         if player.rect.colliderect(item.rect):
@@ -368,9 +421,10 @@ def checkItemCollisions(player, items):
             items.remove(item)
             pygame.time.set_timer(timer_event,qte_ressource.duree)
         if started:
-            qte_ressource.start(window_width, window_height, GRIS, window, textFont, player)
+            qte.start(window_width, window_height, GRIS, window, textFont, player)
         if event.type == timer_event:
-            qte_ressource.isFinish = True
+            qte.isFinish = True
+            not_sel_qte = False
             started = False
             pygame.time.set_timer(timer_event, 0)
 def take():
@@ -387,6 +441,7 @@ def take():
     banque.coll_zone = get_collision_tiles(tmx_data, "banque_zone")
 
     strucGroupe = [musee,hopital, ecole,stade,puit,banque]
+    #joueur 1
     pygame.draw.rect(window,GRIS,(150,300,100,20))
     pygame.draw.rect(window,GRIS,(210,10,100,20))
     pygame.draw.rect(window,GRIS,(450,10,100,20))
@@ -400,6 +455,22 @@ def take():
     pygame.draw.rect(window,(50, 158, 168),(550,230,stade.charge_state,20))
     pygame.draw.rect(window,(50, 158, 168),(850,50,hopital.charge_state,20))
     pygame.draw.rect(window,(50, 158, 168),(700,600,puit.charge_state,20))
+
+    #joeuur 2
+
+    pygame.draw.rect(window, GRIS, (150, 270, 100, 20))
+    pygame.draw.rect(window, GRIS, (210, 40, 100, 20))
+    pygame.draw.rect(window, GRIS, (450, 40, 100, 20))
+    pygame.draw.rect(window, GRIS, (550, 200, 100, 20))
+    pygame.draw.rect(window, GRIS, (850, 20, 100, 20))
+    pygame.draw.rect(window, GRIS, (700, 570, 100, 20))
+
+    pygame.draw.rect(window, (181, 61, 53), (150, 300, musee.charge_state, 20))
+    pygame.draw.rect(window, (181, 61, 53), (210, 10, ecole.charge_state, 20))
+    pygame.draw.rect(window, (181, 61, 53), (450, 10, banque.charge_state, 20))
+    pygame.draw.rect(window, (181, 61, 53), (550, 230, stade.charge_state, 20))
+    pygame.draw.rect(window, (181, 61, 53), (850, 50, hopital.charge_state, 20))
+    pygame.draw.rect(window, (181, 61, 53), (700, 600, puit.charge_state, 20))
     anyCol = False
     for structure in strucGroupe:
         for tile in structure.coll_zone:
@@ -469,7 +540,10 @@ def inGame():
     player.competences = player.country.competences
     if player.country == allemagne:
         player.images = images_sprite_allemagne
-
+    elif player.country == chine:
+        player.images = images_sprite_chine
+    elif player.country == russie:
+        player.images == images_sprite_russie
     draw_map(window, tmx_data)
     collision_tilesBatiment = get_collision_tiles(tmx_data, "batiments")
     collision_tilesPalmier = get_collision_tiles(tmx_data, "palmier")
@@ -544,7 +618,7 @@ def resetGame():
     count_struc_complete = 0
     list_struc_complete = []
 
-    player = Player(125, 680, competences, 60, None, images_sprite_france, 0)
+    player = Player(125, 680, competences_france, 60, None, images_sprite_france, 0)
     imgPlayer = france.imgPlayer
     imgPlayer = pygame.transform.scale(imgPlayer, (192, 192))
 
@@ -563,7 +637,7 @@ def initWin():
     s = pygame.Surface((window_width/2, window_height/2))
     s.set_alpha(70)
     s.fill(GRIS)
-    titletext = littleTitlefont.render("Vous avez gagne", False, (0, 0, 0))
+    titletext = littleTitlefont.render("Vous gagnez la partie", False, (0, 0, 0))
     titletext_rect = titletext.get_rect()
     titletext_rect.center = (window_width / 2, window_height / 3)
     if replayBtn.isClicked():
@@ -579,6 +653,48 @@ def initWin():
     window.blit(titletext,titletext_rect)
     replayBtn.draw(window)
 
+def initLoss():
+    global gamestate
+    global music_started
+    s = pygame.Surface((window_width/2, window_height/2))
+    s.set_alpha(70)
+    s.fill(GRIS)
+    titletext = littleTitlefont.render("Vous perdez la partie", False, (0, 0, 0))
+    titletext_rect = titletext.get_rect()
+    titletext_rect.center = (window_width / 2, window_height / 3)
+    if replayBtn.isClicked():
+        gamestate = GameState.GameState.SELECTING_COUNTRY
+        resetGame()
+        pygame.mixer.music.stop()
+        if not music_started:
+            pygame.mixer.music.load("assets/sound/zic intro.mp3")
+            pygame.mixer.music.play(-1)
+            music_started = True
+    window.blit(s, (window_width/4, window_height/4))
+    window.blit(titletext,titletext_rect)
+    replayBtn.draw(window)
+
+def initDraw():
+    global gamestate
+    global music_started
+    s = pygame.Surface((window_width/2, window_height/2))
+    s.set_alpha(70)
+    s.fill(GRIS)
+    titletext = littleTitlefont.render("Personne ne gagne", False, (0, 0, 0))
+    titletext_rect = titletext.get_rect()
+    titletext_rect.center = (window_width / 2, window_height / 3)
+    if replayBtn.isClicked():
+        gamestate = GameState.GameState.SELECTING_COUNTRY
+        resetGame()
+        pygame.mixer.music.stop()
+        if not music_started:
+            pygame.mixer.music.load("assets/sound/zic intro.mp3")
+            pygame.mixer.music.play(-1)
+            music_started = True
+
+    window.blit(s, (window_width/4, window_height/4))
+    window.blit(titletext,titletext_rect)
+    replayBtn.draw(window)
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -637,7 +753,13 @@ while running:
     elif gamestate == GameState.GameState.IN_GAME:
         inGame()
     elif gamestate == GameState.GameState.WIN:
-        initWin()
+        if player.countClaim > 1:
+            initDraw()
+        elif player.countClaim == 1:
+            initWin()
+        else:
+            initLoss()
+
 
 
     pygame.display.update()

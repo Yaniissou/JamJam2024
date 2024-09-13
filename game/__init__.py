@@ -679,12 +679,12 @@ def resetGame():
     imgPlayer = france.imgPlayer
     imgPlayer = pygame.transform.scale(imgPlayer, (192, 192))
 
-    hopital = Structure("hopital", Competences.Competences.SANTE, 100, None, False, 0, False)
-    ecole = Structure("ecole", Competences.Competences.EDUCATION, 100, None, False, 0, False)
-    banque = Structure("banque", Competences.Competences.FINANCE, 100, None, False, 0, False)
-    puit = Structure("puit", Competences.Competences.RESSOURCES, 100, None, False, 0, False)
-    stade = Structure("stade", Competences.Competences.SPORT, 100, None, False, 0, False)
-    musee = Structure("musee", Competences.Competences.CULTURE, 100, None, False, 0, False)
+    hopital = Structure("hopital", Competences.Competences.SANTE, 100, 100, None, False, 0, 0, False, False)
+    ecole = Structure("ecole", Competences.Competences.EDUCATION, 100, 100, None, False, 0, 0, False, False)
+    banque = Structure("banque", Competences.Competences.FINANCE, 100, 100, None, False, 0, 0, False, False)
+    puit = Structure("puit", Competences.Competences.RESSOURCES, 100, 100, None, False, 0, 0, False, False)
+    stade = Structure("stade", Competences.Competences.SPORT, 100, 100, None, False, 0, 0, False, False)
+    musee = Structure("musee", Competences.Competences.CULTURE, 100, 100, None, False, 0, 0, False, False)
     items = []
     items = generate_items(20)
 

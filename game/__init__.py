@@ -1,6 +1,9 @@
 import pygame
 import pytmx
-import random
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from game.objects.ClicGame import ClicGame
 from game.objects.mapItem import MapItem
@@ -11,7 +14,10 @@ from objects.button import Button
 from objects.QTE import QTE
 from objects.Pays import Pays
 from objects.Structure import Structure
+import random
+
 from game.objects.mapItem import MapItem
+from server.network import Network
 
 music_started = False
 pygame.init()
@@ -125,6 +131,10 @@ player = Player(125, 680,competences_france,60,None,images_sprite_france,0)
 imgPlayer = france.imgPlayer
 imgPlayer = pygame.transform.scale(imgPlayer,(192,192))
 
+player2 = Player(125, 680,competences,60,None,images_sprite_allemagne,0)
+imgPlayer2 = allemagne.imgPlayer
+imgPlayer = pygame.transform.scale(imgPlayer,(192,192))
+
 hopital = Structure("hopital",Competences.Competences.SANTE,100,None,False,0,False)
 ecole = Structure("ecole",Competences.Competences.EDUCATION,100,None,False,0,False)
 banque = Structure("banque",Competences.Competences.FINANCE,100,None,False,0,False)
@@ -134,6 +144,26 @@ musee = Structure("musee",Competences.Competences.CULTURE,100,None,False,0,False
 
 strucGroupe = [musee,hopital, ecole,stade,puit,banque]
 layer_mer2 = {"mer 2":False}
+
+
+#prendre une chaine de caractères et en déduire une position
+def lire_position(chaine):
+    chaine = chaine.split(",")
+    return int(chaine[0]), int(chaine[1])
+
+#prendre une chaine et en déduire les infos d'un batiment
+def lire_batiment(chaine):
+    chaine = chaine.split(",")
+    return()
+
+#update la fenêtre pour les joueurs
+def redraw(window, player, player2):
+    #on réaffiche les sprites
+    window.blit(player.image, player.rect)
+    window.blit(player2.image, player2.rect)
+    #et on update le tout
+    pygame.display.update()
+
 
 addStar = False
 checked = False
@@ -219,7 +249,7 @@ def initCredits():
     devcontent = ("Yanis Harkati : Developpeur|"
                        "Ilan Darmon : Developpeur|"
                        "Rachel Peretti : Developpeuse|"
-                       "Idibei Hassan : Administrateur reseau|"
+                       "Idibei Hamid : Administrateur reseau|"
                        "Tom Jochum : Directeur artistique")
 
     devlines = devcontent.split('|')
@@ -483,10 +513,28 @@ def inList(list,elem):
         if l == elem:
             return True
     return False
+
+# initialiser
+networkStatus = False
+network = None
+
 def inGame():
     global count_struc_complete
     global gamestate
     global list_struc_complete
+    global networkStatus
+    global network
+
+    #si la connection n'est pas ouverte
+    if not networkStatus:
+        network = Network() #on l'ouvre
+        # et récupérer les positions des joueurs
+        position_depart = lire_position(network.getPos())
+        # debug
+        print(f"Position de départ : {position_depart}")
+        networkStatus = True #pour éviter de l'ouvrir 20 fois en boucle ^^
+
+
     global checked
     player.country = selected_country
     player.competences = player.country.competences
@@ -512,6 +560,25 @@ def inGame():
     circleZone()
     take()
     statPole(player)
+
+    try:
+        data_player2 = network.sendPlayerData((player.rect.x, player.rect.y), 'pseudo', 'France')
+        pos_player2 = lire_position(data_player2[0])
+        pseudo_player2 = data_player2[1]
+        country_player2 = data_player2[2]
+    except:
+        print("erreur!!")
+        pass
+
+    # update la pos du joueur 2
+    player2.rect.x = pos_player2[0]
+    player2.rect.y = pos_player2[1]
+
+    # si on est en jeu on affiche les sprites des joueurs
+    # pour pas que ça s'affiche sur l'écran principal/dès qu'il y a connexion
+    if gamestate == gamestate.IN_GAME:
+        # update les sprites des joueurs
+        redraw(window, player, player2)
 
     for struc in strucGroupe:
         if struc.isCLaim and not inList(list_struc_complete,struc):
@@ -628,11 +695,6 @@ def initDraw():
     window.blit(s, (window_width/4, window_height/4))
     window.blit(titletext,titletext_rect)
     replayBtn.draw(window)
-
-    window.blit(s, (window_width/4, window_height/4))
-    window.blit(titletext,titletext_rect)
-    replayBtn.draw(window)
-
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

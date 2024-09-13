@@ -1,37 +1,49 @@
 import socket
+from ssl import socket_error
 
-# Classe pour gérer la connexion réseau
+
 class Network:
     def __init__(self):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.serveur = "localhost"
-        self.port = 1920
+        self.serveur = "192.168.41.225"  # Remplace par l'adresse IP de l'hôte du serveur
+        self.port = 12345
         self.adresse = (self.serveur, self.port)
         self.position = self.connecter()
 
-    # Fonction pour obtenir la position initiale
     def getPos(self):
         return self.position
 
-    # Fonction pour se connecter au serveur
     def connecter(self):
         try:
             print(f"Tentative de connexion au serveur à {self.adresse}")
             self.client.connect(self.adresse)
             print("Connexion réussie")
-            return self.client.recv(2048).decode()
+            return self.client.recv(1024).decode()
         except:
             pass
 
-    # Fonction pour envoyer et recevoir des données
-    def send_data(self, pos, pseudo, country):
+    #envoyer les données de l'autre joueur
+    #sa position, son pseudo, et le pays choisi
+    def sendPlayerData(self, pos, pseudo, country):
         try:
-            # On envoie la position, le pseudo et le pays sous forme de chaîne
+            #les données concernées
             data = f"{pos[0]},{pos[1]};{pseudo};{country}"
             self.client.send(str.encode(data))
 
-            # On reçoit la réponse du serveur (position, pseudo, pays de l'autre joueur)
-            retour = self.client.recv(2048).decode()
-            return retour.split(";")  # On sépare les données
-        except socket.error as e:
+            #le résultat
+            result = self.client.recv(1024).decode()
+            return result.split(";")
+        except socket.error as e: #si il y a un souci
+            print(e)
+
+    #envoyer les données des batiments sur la map
+    #nom, compétence associée, vie restante, statut
+    def sendBuildingData(self, name, competence, life, isClaimed):
+        try:
+            data = f"{name},{competence}, {life}, {isClaimed}"
+            self.client.send(str.encode(data))
+
+            result = self.client.recv(1024).decode()
+            return result.split(";")
+        except socket_error as e:
             print(e)
